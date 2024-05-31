@@ -1,0 +1,12 @@
+sint5
+5
+10
+32
+s t v
+
+
+exec 1000
+read 200
+exec 400
+read 30
+exec 500
