@@ -1,0 +1,13 @@
+sint3
+3
+2
+8
+s t v
+
+P(s)
+exec 1000
+V(s)
+read 20
+exec 400
+read 30
+exec 500
