@@ -59,6 +59,9 @@ typedef struct
 {
     Round_robin **cabeca_robin;
     Semaforo **cabeca_sem;
+    Segmento **cabeca_seg;
+    Segmento **remover;
+    Vetor_tabela_pag *memoria;
 } ThreadArgs;
 
 void *round_robin_thread(void *arg)
@@ -66,29 +69,22 @@ void *round_robin_thread(void *arg)
     ThreadArgs *args = (ThreadArgs *)arg;
     Round_robin **cabeca_robin = args->cabeca_robin;
     Semaforo **cabeca_sem = args->cabeca_sem;
+    Segmento **cabeca_segmento = args->cabeca_seg;
+    Segmento **remover_seg = args->cabeca_seg;
+    Vetor_tabela_pag *memoria = args->memoria;
     while (!(*cabeca_robin) && !(*cabeca_sem))
         ;
     while (1)
     {
-        /*pthread_mutex_lock(&mutex_interrupcao);
-        if (flag_interrupcao)
-        {
-            pthread_mutex_unlock(&mutex_interrupcao);
-            break;
-        }
-        pthread_mutex_unlock(&mutex_interrupcao);*/
         while (!flag_interrupcao && cabeca_robin && cabeca_sem)
         {
-            robin_robin_atende(cabeca_robin, cabeca_sem);
+            robin_robin_atende(cabeca_robin, cabeca_sem, cabeca_segmento, remover_seg, memoria);
         }
     }
 
     return NULL;
 }
 
-// Menu tem que chamar sempre - while
-// Caso da interrupção do robin
-// thread
 int main()
 {
     sem_init(&ler, 1, 1);
@@ -119,6 +115,9 @@ int main()
 
     thread_argumento.cabeca_robin = &cabeca_robin;
     thread_argumento.cabeca_sem = &cabeca_semaforo;
+    thread_argumento.cabeca_seg = &cabeca_segmento;
+    thread_argumento.remover = &remover;
+    thread_argumento.memoria = &memoria;
 
     if (pthread_create(&thread, &thread_atributo, round_robin_thread, &thread_argumento) != 0)
     {
@@ -157,7 +156,7 @@ int main()
                 if (existe_memoria)
                 {
                     printf("\033[38;5;196m");
-                    printf("\n\t\t\033[6;1mO PROCESSO JÁ EXISTE NA MEMÓRIA\033[0m\n");
+                    printf("\n\t\t\033[6;1mO PROCESSO JÁ EXISTE NA MEMÓRIA (PIDS IGUAIS)\033[0m\n");
                     sleep(1);
                     system("clear");
                     break;

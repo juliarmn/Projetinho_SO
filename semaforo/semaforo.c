@@ -1,5 +1,5 @@
 #include "semaforo.h"
-
+#include <semaphore.h>
 /**
  * @param char caracteres do semaforo
  *
@@ -78,11 +78,15 @@ Processo *remover_fila_espera(Semaforo **semaforo)
 int semaforo_P(Semaforo **semaforo_cabeca, char id, Processo *processo)
 {
     Semaforo *aux = buscar_semaforo(id, *semaforo_cabeca);
+    sem_t P;
+    sem_init(&P, 1, 1);
 
     if (!aux->ocupado)
     {
+        sem_wait(&P);
         aux->id_processo = processo->pid;
         aux->ocupado = 1;
+        sem_post(&P);
         return 1;
     }
 
@@ -103,10 +107,14 @@ int semaforo_P(Semaforo **semaforo_cabeca, char id, Processo *processo)
 int semaforo_V(Semaforo **semaforo_cabeca, char id)
 {
     Semaforo *aux = buscar_semaforo(id, *semaforo_cabeca);
+    sem_t V;
+    sem_init(&V, 1, 1);
 
     if (aux->ocupado)
     {
+        sem_wait(&V);
         aux->ocupado = 0;
+        sem_post(&V);
         return 1;
     }
 

@@ -1,5 +1,15 @@
 # Projeto de SO - primeiro integrável
 
+### ALUNOS
+
+Amanda Prampero Paes Mendes
+
+Júlia Rodrigues Marques do Nascimento
+
+Rubens Abrão Comelis
+
+# Sobre
+
 A ideia do projeto era simular o funcionamento de um sistema operacional. Cada pedaço do que foi requerido foi subdividido em pastas e módulos para  melhor gerenciamento.
 
 

@@ -49,36 +49,36 @@ int achar_pag_livre(Vetor_tabela_pag *tabela_pagina)
  */
 Segmento *criar_segmento(Processo *processo)
 {
-    Segmento *novo_seguimento = malloc(sizeof(Segmento));
-    novo_seguimento->processo = malloc(sizeof(Processo));
-    novo_seguimento->processo->lista_instrucao = malloc(sizeof(Instrucao));
+    Segmento *novo_segmento = malloc(sizeof(Segmento));
+    novo_segmento->processo = malloc(sizeof(Processo));
+    novo_segmento->processo->lista_instrucao = malloc(sizeof(Instrucao));
     processo->lista_instrucao = processo->cabeca_instrucao;
-    novo_seguimento->id = id_seg;
+    novo_segmento->id = id_seg;
     id_seg++;
     int i;
 
-    novo_seguimento->processo->criacao = processo->criacao;
-    novo_seguimento->processo->cabeca_instrucao = processo->cabeca_instrucao;
+    novo_segmento->processo->criacao = processo->criacao;
+    novo_segmento->processo->cabeca_instrucao = processo->cabeca_instrucao;
 
-    strcpy(novo_seguimento->processo->lista_sem, processo->lista_sem);
-    strcpy(novo_seguimento->processo->nome, processo->nome);
-    novo_seguimento->processo->pid = processo->pid;
-    novo_seguimento->processo->prioridade = processo->prioridade;
-    novo_seguimento->processo->status = processo->status;
-    novo_seguimento->processo->tam = processo->tam;
-    novo_seguimento->processo->duracao = processo->duracao;
+    strcpy(novo_segmento->processo->lista_sem, processo->lista_sem);
+    strcpy(novo_segmento->processo->nome, processo->nome);
+    novo_segmento->processo->pid = processo->pid;
+    novo_segmento->processo->prioridade = processo->prioridade;
+    novo_segmento->processo->status = processo->status;
+    novo_segmento->processo->tam = processo->tam;
+    novo_segmento->processo->duracao = processo->duracao;
 
     // Inicializando lista de indices livres
     for (i = 0; i < NUM_TOTAL_PAG; i++)
-        novo_seguimento->index_vet_pag[i] = -1;
+        novo_segmento->index_vet_pag[i] = -1;
 
-    novo_seguimento->dirty_bit = 0;
-    novo_seguimento->modificado = 0;
+    novo_segmento->dirty_bit = 0;
+    novo_segmento->modificado = 0;
 
-    novo_seguimento->prox = NULL;
-    novo_seguimento->bit_presenca = 0;
+    novo_segmento->prox = NULL;
+    novo_segmento->bit_presenca = 0;
 
-    return novo_seguimento;
+    return novo_segmento;
 }
 
 /**
@@ -129,9 +129,9 @@ Segmento *inserir_processo_memoria(Processo *processo, Vetor_tabela_pag *tabela_
     int i = 0, qtd_pag = 0;
     int pag_livre;
 
-    Segmento *novo_seguimento = criar_segmento(processo);
+    Segmento *novo_segmento = criar_segmento(processo);
 
-    inserir_segmento_lista(cabeca_segmento, novo_seguimento);
+    inserir_segmento_lista(cabeca_segmento, novo_segmento);
 
     int tamanho_seg = processo->tam;
 
@@ -155,13 +155,13 @@ Segmento *inserir_processo_memoria(Processo *processo, Vetor_tabela_pag *tabela_
 
                 qtd_pag++;
             }
-            novo_seguimento->index_vet_pag[i] = pag_livre;
-            novo_seguimento->quantidade_pag = qtd_pag;
+            novo_segmento->index_vet_pag[i] = pag_livre;
+            novo_segmento->quantidade_pag = qtd_pag;
 
             i++;
         }
     }
-    return novo_seguimento;
+    return novo_segmento;
 }
 
 /**
@@ -210,7 +210,7 @@ void remover_segmento_da_lista(Segmento **cabeca_segmento, Segmento *segmento_a_
  *
  * @return nada
  */
-void remover_processo(int pid, Segmento **cabeca_segmento, Vetor_tabela_pag *paginas)
+void remover_processo(int pid, Segmento **cabeca_segmento, Vetor_tabela_pag *paginas, Segmento **remover_seg)
 {
     int i;
     Segmento *aux = (*cabeca_segmento), *aux_ant;
@@ -226,6 +226,11 @@ void remover_processo(int pid, Segmento **cabeca_segmento, Vetor_tabela_pag *pag
                 paginas->qtd_pag_livre++;
             }
             aux_ant = aux;
+            if (aux->prox) {
+                (*remover_seg) = aux;
+            } else {
+                remover_seg = cabeca_segmento;
+            }
             remover_segmento_da_lista(cabeca_segmento, aux_ant);
 
             break;
@@ -234,9 +239,9 @@ void remover_processo(int pid, Segmento **cabeca_segmento, Vetor_tabela_pag *pag
     }
 }
 
-void swap_out(Segmento *segmento, Segmento **cabeca_seguimento, FILE *fp, Vetor_tabela_pag *paginas)
+void swap_out(Segmento *segmento, Segmento **cabeca_segmento, FILE *fp, Vetor_tabela_pag *paginas, Segmento **remover_seg)
 {
-    // Se foi modificado em memória, copia no arquvio
+    // Se foi modificado em memória, copia no arquivo
     if (segmento->modificado)
     {
         fseek(fp, 0, SEEK_SET);
@@ -267,7 +272,7 @@ void swap_out(Segmento *segmento, Segmento **cabeca_seguimento, FILE *fp, Vetor_
             segmento->processo->lista_instrucao = segmento->processo->lista_instrucao->prox;
         }
     }
-    remover_processo(segmento->processo->pid, cabeca_seguimento, paginas);
+    remover_processo(segmento->processo->pid, cabeca_segmento, paginas, remover_seg);
 }
 
 /**
@@ -296,11 +301,7 @@ void segunda_chance(Segmento **cabeca_segmento, Vetor_tabela_pag *paginas, Segme
         }
         else // Nao foi modificao (remove ele)
         {
-            if (aux->prox)
-                (*remover) = aux->prox;
-            else
-                (*remover) = (*cabeca_segmento); // marca em qual ponteiro continuar quando for procurar novamente
-            swap_out(aux, cabeca_segmento, fp, paginas);
+            swap_out(aux, cabeca_segmento, fp, paginas, remover);
             break;
         }
 

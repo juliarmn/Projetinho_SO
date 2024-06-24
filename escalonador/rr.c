@@ -85,17 +85,17 @@ void inserir_round_robin(Round_robin **cabeca, Processo *elemento)
  *
  * @return 1 se a lista está vazia e 0 se ainda tem elementos
  */
-int remover(Round_robin **cabeca, Processo *elemento)
+int remover(Round_robin **cabeca, Processo *elemento, Vetor_tabela_pag *memoria, Segmento **cabeca_seg, Segmento **remover_seg)
 {
 
     Round_robin *aux = (*cabeca);
     Round_robin *aux_ant = NULL;
     // O elemento é o único da lista, pois a cabeca não tem prox
+    remover_processo(aux->processo->pid, cabeca_seg, memoria, remover_seg);
     if (!(*cabeca)->prox)
     {
         (*cabeca) = NULL;
         printf("\033[1;33m\t\tO Processo %s foi atendido.\n", aux->processo->nome);
-
         free(aux->processo);
         free(aux);
 
@@ -296,7 +296,7 @@ Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **ca
         relogio += quantum;
     }
     atendido->processo->status = 4;
-    //sleep(2);
+    // sleep(2);
     return atendido;
 }
 
@@ -311,7 +311,7 @@ Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **ca
  *
  * @return void
  */
-void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem)
+void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabela_pag *memoria, Segmento **cabeca_seg, Segmento **remover_seg)
 {
     if (!(*cabeca) && !(*cabeca_sem))
         return;
@@ -388,7 +388,7 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem)
                 aux_prox_pos_remocao = aux->prox;
             else
                 aux_prox_pos_remocao = (*cabeca);
-            lista_vazia = remover(cabeca, aux->processo);
+            lista_vazia = remover(cabeca, aux->processo, memoria, cabeca_seg, remover_seg);
             aux = aux_prox_pos_remocao;
 
             if (flag_interrupcao == 1)
@@ -405,14 +405,15 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem)
         }
     }
 
-    //pthread_mutex_lock(&mutex_interrupcao);
+    // pthread_mutex_lock(&mutex_interrupcao);
     flag_interrupcao = 1;
-    //pthread_mutex_unlock(&mutex_interrupcao);
+    // pthread_mutex_unlock(&mutex_interrupcao);
 }
 
 void print_lista_robin(Round_robin *robin)
 {
-    if (robin->processo->status == 0) {
+    if (robin->processo->status == 0)
+    {
         printf("\t\t\033[1;33mprocesso %s blocked\n", robin->processo->nome);
         return;
     }

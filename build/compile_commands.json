@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/juliarmn/Projetinho_SO/build",
+  "command": "/usr/bin/cc    -pthread -Wall -lncurses -g -g -std=gnu11 -o CMakeFiles/GatuOS.dir/main.c.o -c /home/juliarmn/Projetinho_SO/main.c",
+  "file": "/home/juliarmn/Projetinho_SO/main.c",
+  "output": "CMakeFiles/GatuOS.dir/main.c.o"
+},
+{
+  "directory": "/home/juliarmn/Projetinho_SO/build",
+  "command": "/usr/bin/cc    -pthread -Wall -lncurses -g -g -std=gnu11 -o CMakeFiles/GatuOS.dir/processo/process.c.o -c /home/juliarmn/Projetinho_SO/processo/process.c",
+  "file": "/home/juliarmn/Projetinho_SO/processo/process.c",
+  "output": "CMakeFiles/GatuOS.dir/processo/process.c.o"
+},
+{
+  "directory": "/home/juliarmn/Projetinho_SO/build",
+  "command": "/usr/bin/cc    -pthread -Wall -lncurses -g -g -std=gnu11 -o CMakeFiles/GatuOS.dir/escalonador/rr.c.o -c /home/juliarmn/Projetinho_SO/escalonador/rr.c",
+  "file": "/home/juliarmn/Projetinho_SO/escalonador/rr.c",
+  "output": "CMakeFiles/GatuOS.dir/escalonador/rr.c.o"
+},
+{
+  "directory": "/home/juliarmn/Projetinho_SO/build",
+  "command": "/usr/bin/cc    -pthread -Wall -lncurses -g -g -std=gnu11 -o CMakeFiles/GatuOS.dir/memoria/memoria.c.o -c /home/juliarmn/Projetinho_SO/memoria/memoria.c",
+  "file": "/home/juliarmn/Projetinho_SO/memoria/memoria.c",
+  "output": "CMakeFiles/GatuOS.dir/memoria/memoria.c.o"
+},
+{
+  "directory": "/home/juliarmn/Projetinho_SO/build",
+  "command": "/usr/bin/cc    -pthread -Wall -lncurses -g -g -std=gnu11 -o CMakeFiles/GatuOS.dir/semaforo/semaforo.c.o -c /home/juliarmn/Projetinho_SO/semaforo/semaforo.c",
+  "file": "/home/juliarmn/Projetinho_SO/semaforo/semaforo.c",
+  "output": "CMakeFiles/GatuOS.dir/semaforo/semaforo.c.o"
+}
+]
