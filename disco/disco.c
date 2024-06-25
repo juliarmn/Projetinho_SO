@@ -2,15 +2,35 @@
 
 extern int relogio;
 
-// Inserir a trilha na lista - nao tem apagar nem att ent ok - pft
-// Ler trilha
-// Inserir na fila de espera -ok
-// Atender fila -ok
 
-// funções print e arq
-// Elevador
+// Colocar rabo
+// Nao ter nada arrumar pelo diskrequest
+// inserir arrumar com rabo
+// Fila arrumar a inserir para ser por prioridade
+// Disk request calcula essa prioridade
+// disk finish arrumar
+// Fazer a print 1 e 2
 
-int buscar_trilha(Disco *HD, int num_trilha)
+void disk_finish(Processo *processo)
+{
+    processo->status = 1;
+}
+
+void disk_request(char op, Disco *HD, int num_trilha, Processo *processo)
+{
+    processo->status = 0;
+    if (op == 'w')
+    {
+        inserir_trilha(processo, num_trilha, &HD);
+    }
+    else
+    {
+        ler_processo(HD, num_trilha);
+    }
+    disk_finish(processo);
+}
+
+int trilha_existe(Disco *HD, int num_trilha)
 {
     // Testando tem trilhas
     if (!HD->cabeca_trilhas)
@@ -18,18 +38,11 @@ int buscar_trilha(Disco *HD, int num_trilha)
         return 0;
     }
 
-    Trilhas *aux = HD->cabeca_trilhas->prox;
-
-    // Testando se ser a cabeca
-    if (HD->cabeca_trilhas->num_trilha == num_trilha)
-    {
-        return 1;
-    }
+    Trilhas *aux = HD->cabeca_trilhas;
 
     // andando na lista e verificando se temos o elemento na trilha
-    while (HD->cabeca_trilhas != aux)
+    while (aux)
     {
-
         if (aux->num_trilha == num_trilha)
         {
             return 1;
@@ -38,10 +51,10 @@ int buscar_trilha(Disco *HD, int num_trilha)
     return 0;
 }
 
-void inserir_trilha(Processo *processo, int num_trilha, Disco **HD)
+void inserir_trilha(int num_trilha, Disco **HD)
 {
 
-    if (buscar_trilha((*HD), num_trilha))
+    if (trilha_existe((*HD), num_trilha))
     {
         printf("Trilha ocupada\n");
         return;
@@ -49,46 +62,47 @@ void inserir_trilha(Processo *processo, int num_trilha, Disco **HD)
 
     Trilhas *novo = malloc(sizeof(Trilhas));
     novo->num_trilha = num_trilha;
-    novo->processo->cabeca_instrucao = processo;
+    novo->processo->cabeca_instrucao = (*HD)->fila->processo;
 
     if (!(*HD)->cabeca_trilhas)
     {
         novo->ant = novo->prox = NULL;
         (*HD)->cabeca_trilhas = novo;
+        (*HD)->tam_trilhas++;
         return;
-    }
-
-    // So tem 1 elemento
-    if (!(*HD)->cabeca_trilhas->prox)
-    {
-        (*HD)->cabeca_trilhas->prox = (*HD)->cabeca_trilhas->ant = novo;
-        novo->ant = novo->prox = (*HD)->cabeca_trilhas;
     }
 
     // Se for menor que a cabeca
     if ((*HD)->cabeca_trilhas->num_trilha > num_trilha)
     {
-        novo->ant = (*HD)->cabeca_trilhas->ant;
+        novo->ant = NULL;
         novo->prox = (*HD)->cabeca_trilhas;
-        (*HD)->cabeca_trilhas->ant->prox = novo;
         (*HD)->cabeca_trilhas->ant = novo;
         (*HD)->cabeca_trilhas = novo;
+        (*HD)->tam_trilhas++;
+        return;
     }
 
-    Trilhas *aux = (*HD)->cabeca_trilhas->prox;
+    Trilhas *aux = (*HD)->cabeca_trilhas;
     // Se nao procura a posicao dele na lista
-    while (aux != (*HD)->cabeca_trilhas)
+    while (aux->prox)
     {
         if (aux->num_trilha > novo->num_trilha)
         {
-            novo->prox = aux;
             novo->ant = aux->ant;
+            novo->prox = aux;
             aux->ant->prox = novo;
             aux->ant = novo;
+            (*HD)->tam_trilhas++;
             return;
         }
         aux = aux->prox;
     }
+
+    aux->prox = novo;
+    novo->ant = aux;
+    (*HD)->tam_trilhas++;
+    novo->prox = NULL;
 }
 
 void inserir_fila_espera(Disco **HD, Processo *processo, int num_trilha)
@@ -101,7 +115,7 @@ void inserir_fila_espera(Disco **HD, Processo *processo, int num_trilha)
     {
         novo->prox = NULL;
         (*HD)->fila = novo;
-        (*HD)->fila->tam++;
+        (*HD)->tam_fila++;
         return;
     }
 
@@ -113,15 +127,25 @@ void inserir_fila_espera(Disco **HD, Processo *processo, int num_trilha)
     }
 
     aux->prox = novo;
-    (*HD)->fila->tam++;
+    (*HD)->tam_fila++;
     novo->prox = NULL;
 }
 
-Fila_Request *atender_fila(Disco **HD)
+Fila_Request *atender_fila(Disco **HD, int num_trilha)
 {
     Fila_Request *aux = (*HD)->fila;
+
+    if (aux->op == 'w')
+    {
+        inserir_trilha(num_trilha, (*HD));
+    }
+    else
+    {
+        ler_processo((*HD), num_trilha);
+    }
+
     (*HD)->fila = (*HD)->fila->prox;
-    (*HD)->fila->tam--;
+    (*HD)->tam_fila--;
 
     return aux;
 }
@@ -145,42 +169,61 @@ Trilhas *buscar_trilha(int num_trilha, Disco *HD)
     return NULL;
 }
 
-int print_request(int num_trilha, Disco *HD)
+void ler_processo(Disco *HD, int num_trilha)
 {
-    int funcionou;
-    Trilhas *imprimir;
-    imprimir = buscar_trilha(num_trilha, HD);
-    int retorno;
+    Processo *processo;
+    Trilhas *trilha = buscar_trilha(num_trilha, HD);
+    int tam;
+    printf("\033[38;5;206m");
 
-    if (imprimir)
+    printf("Início da leitura\n");
+    sleep(1);
+    if (!trilha)
     {
-        printf("\033[38;5;206m");
-        printf("/----------------------/\nPrint da trilha %d\n", num_trilha);
-        printf("\033[38;5;21m");
-        printf("Nome processo:\033[0m %s\n", HD->cabeca_trilhas->processo->nome);
-        printf("\033[38;5;21m");
-        printf("Tamanho:\033[0m %d\n", HD->cabeca_trilhas->processo->tam);
-        printf("\033[38;5;21m");
-        printf("Prioridade processo:\033[0m %d\n", HD->cabeca_trilhas->processo->prioridade);
-        printf("\033[38;5;206m");
-        printf("/----------------------/\n");
+        printf("\033[6;1mNada na trilha\n");
+        return;
     }
-    retorno = printf_request_finish(imprimir);
-    return retorno;
+
+    processo = trilha->processo;
+    tam = processo->tam;
+    tam /= 50;
+
+    sleep(tam);
+    printf("\033[38;5;206m");
+    printf("Operação de leitura do processo %s realizada\n", processo->nome);
 }
 
-int printf_request_finish(Trilhas *imprimir)
+void elevador(Disco **HD, Trilhas **atual)
 {
-    if (imprimir)
+    int direcao = 1; // 1 tá indo e 2 voltando
+
+    while (1)
     {
-        printf("\033[38;5;93m");
-        printf("Fim da impressão\n");
-        return 1;
-    }
-    else
-    {
-        printf("\033[38;5;196m");
-        printf("Erro ao imprimir\n");
-        return 0;
+        if ((*atual)->num_trilha == (*HD)->fila->num_trilha)
+        {
+            atender_fila(HD, (*atual)->num_trilha);
+        }
+
+        if (!(*atual)->prox && !(*atual)->ant)
+            continue;
+
+        if (!(*atual)->prox)
+        {
+            direcao = 2;
+        }
+
+        if (!(*atual)->ant)
+        {
+            direcao = 1;
+        }
+
+        if (direcao == 1)
+        {
+            (*atual) = (*atual)->prox;
+        }
+        else
+        {
+            (*atual) = (*atual)->ant;
+        }
     }
 }
