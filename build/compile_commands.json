@@ -28,5 +28,11 @@
   "command": "/usr/bin/cc    -pthread -Wall -lncurses -g -g -std=gnu11 -o CMakeFiles/GatuOS.dir/semaforo/semaforo.c.o -c /home/juliarmn/Projetinho_SO/semaforo/semaforo.c",
   "file": "/home/juliarmn/Projetinho_SO/semaforo/semaforo.c",
   "output": "CMakeFiles/GatuOS.dir/semaforo/semaforo.c.o"
+},
+{
+  "directory": "/home/juliarmn/Projetinho_SO/build",
+  "command": "/usr/bin/cc    -pthread -Wall -lncurses -g -g -std=gnu11 -o CMakeFiles/GatuOS.dir/disco/disco.c.o -c /home/juliarmn/Projetinho_SO/disco/disco.c",
+  "file": "/home/juliarmn/Projetinho_SO/disco/disco.c",
+  "output": "CMakeFiles/GatuOS.dir/disco/disco.c.o"
 }
 ]

@@ -15,6 +15,8 @@ add_executable(GatuOS
     memoria/memoria.c
     semaforo/semaforo.h
     semaforo/semaforo.c
+    disco/disco.h
+    disco/disco.c
 )
 
 target_link_libraries(GatuOS ${CURSES_LIBRARIES})

@@ -129,6 +129,30 @@ GatuOS/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/GatuOS.dir/build.make CMakeFiles/GatuOS.dir/build
 .PHONY : GatuOS/fast
 
+disco/disco.o: disco/disco.c.o
+.PHONY : disco/disco.o
+
+# target to build an object file
+disco/disco.c.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GatuOS.dir/build.make CMakeFiles/GatuOS.dir/disco/disco.c.o
+.PHONY : disco/disco.c.o
+
+disco/disco.i: disco/disco.c.i
+.PHONY : disco/disco.i
+
+# target to preprocess a source file
+disco/disco.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GatuOS.dir/build.make CMakeFiles/GatuOS.dir/disco/disco.c.i
+.PHONY : disco/disco.c.i
+
+disco/disco.s: disco/disco.c.s
+.PHONY : disco/disco.s
+
+# target to generate assembly for a file
+disco/disco.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/GatuOS.dir/build.make CMakeFiles/GatuOS.dir/disco/disco.c.s
+.PHONY : disco/disco.c.s
+
 escalonador/rr.o: escalonador/rr.c.o
 .PHONY : escalonador/rr.o
 
@@ -258,6 +282,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... GatuOS"
+	@echo "... disco/disco.o"
+	@echo "... disco/disco.i"
+	@echo "... disco/disco.s"
 	@echo "... escalonador/rr.o"
 	@echo "... escalonador/rr.i"
 	@echo "... escalonador/rr.s"

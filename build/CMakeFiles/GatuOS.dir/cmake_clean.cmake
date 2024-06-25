@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/GatuOS.dir/disco/disco.c.o"
+  "CMakeFiles/GatuOS.dir/disco/disco.c.o.d"
   "CMakeFiles/GatuOS.dir/escalonador/rr.c.o"
   "CMakeFiles/GatuOS.dir/escalonador/rr.c.o.d"
   "CMakeFiles/GatuOS.dir/main.c.o"

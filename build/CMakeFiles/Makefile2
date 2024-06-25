@@ -81,12 +81,12 @@ clean: CMakeFiles/GatuOS.dir/clean
 CMakeFiles/GatuOS.dir/all:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/GatuOS.dir/build.make CMakeFiles/GatuOS.dir/depend
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/GatuOS.dir/build.make CMakeFiles/GatuOS.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/juliarmn/Projetinho_SO/build/CMakeFiles --progress-num=1,2,3,4,5,6 "Built target GatuOS"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/home/juliarmn/Projetinho_SO/build/CMakeFiles --progress-num=1,2,3,4,5,6,7 "Built target GatuOS"
 .PHONY : CMakeFiles/GatuOS.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/GatuOS.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/juliarmn/Projetinho_SO/build/CMakeFiles 6
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/juliarmn/Projetinho_SO/build/CMakeFiles 7
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/GatuOS.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/juliarmn/Projetinho_SO/build/CMakeFiles 0
 .PHONY : CMakeFiles/GatuOS.dir/rule

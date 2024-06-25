@@ -207,36 +207,9 @@ void imprimir_processo(Processo *processo)
     printf("\033[38;5;206m");
     printf("\n\t\tQTD INST:\033[0m %d", qtd_inst);
     printf("\033[1;33m");
-    // printf("\n\t\tINSTRUÇÃO FICA 15 SEG NA TELA\n\033[0m");
     processo->lista_instrucao = processo->cabeca_instrucao;
-    // printf(".\033[0m....");
     printf("\033[0m");
     printf("\n\t\tPRESSIONE ENTER PARA VOLTAR\033[0m\n");
     while ((tecla = getchar()) != '\n')
         ;
-
-    // sleep(7);
-    // system("clear");
 }
-
-/*
-void adicionar_log(Processo *processo, char *mensagem)
-{
-    log_processo *aux = processo->cabeca_log;
-    log_processo *novo = malloc(sizeof(log_processo));
-    novo->prox = NULL;
-    strcpy(novo->mensagem, mensagem);
-
-    if (!aux)
-    {
-        processo->cabeca_log = novo;
-
-        return;
-    }
-    while (aux->prox)
-    {
-        aux = aux->prox;
-    }
-
-    aux->prox = novo;
-}*/
