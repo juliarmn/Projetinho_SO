@@ -11,17 +11,17 @@ typedef struct lista_trilhas {
 } Trilhas;
 
 typedef struct f{
-    int tam;
     Processo *processo;
     int num_trilha;
     char op; 
+    int prioridade;
     struct f *prox;
 } Fila_Request;
 
 typedef struct d {
     int em_uso;
     int tam_fila;
-    int tam_trilhas;
+    int ultima_trilha;
     Trilhas *cabeca_trilhas;
     Fila_Request *fila;
 } Disco;
