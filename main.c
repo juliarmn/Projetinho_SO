@@ -8,13 +8,14 @@
 #include <semaphore.h>
 int relogio = 0;
 pthread_cond_t condicao_interrupcao = PTHREAD_COND_INITIALIZER;
-// pthread_mutex_t mutex_interrupcao = PTHREAD_MUTEX_INITIALIZER;
 sem_t ler;
 int flag_interrupcao = 0;
 int imprime_robin = 0;
 
 
-
+int main () {
+    
+}
 
 /*
 void imprime_logo()
@@ -42,6 +43,7 @@ void imprime_logo()
  *
  * @return int opcao escolhida
  */
+/*
 int menu()
 {
     int op;
