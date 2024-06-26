@@ -6,6 +6,7 @@
 #include "disco/disco.h"
 #include "ES/imprimir.h"
 #include <semaphore.h>
+#include <unistd.h>
 int relogio = 0;
 pthread_cond_t condicao_interrupcao = PTHREAD_COND_INITIALIZER;
 sem_t ler;
@@ -14,7 +15,7 @@ int imprime_robin = 0;
 
 void imprime_logo()
 {
-    system("clear");
+    //system("clear");
     printf("\033[38;5;206m");
     printf("\n\n");
     printf("\t\t\t\t\t /\\_/\\  \n");
@@ -40,7 +41,6 @@ void imprime_logo()
 int menu()
 {
     int op;
-
     imprime_logo();
     printf("\033[38;5;21m");
     printf("\t\t1)\033[0m Criar um novo processo\n");
@@ -79,7 +79,7 @@ void *round_robin_thread(void *arg)
     Disco **HD = args->HD;
     Trilhas **atual = args->atual;
     Print_request **cabeca_print = args->cabeca_print;
-    while (!(*cabeca_robin) && !(*cabeca_sem))
+    while (!(*cabeca_robin) || !(*cabeca_sem))
         ;
     while (1)
     {
@@ -143,7 +143,7 @@ int main()
         printf("\033[38;5;196m");
         printf("\n\t\t\033[6;1mNÃO CRIOU A THREAD\033[0m\n");
         sleep(1);
-        system("clear");
+        //system("clear");
         return 1;
     }
 
@@ -156,7 +156,7 @@ int main()
             printf("\033[38;5;196m");
             printf("\n\t\t\033[6;1mDIGITE UMA OPÇÃO VÁLIDA\033[0m\n");
             sleep(1);
-            system("clear");
+            //system("clear");
         }
 
         switch (op)
@@ -180,7 +180,7 @@ int main()
                     printf("\033[38;5;196m");
                     printf("\n\t\t\033[6;1mO PROCESSO JÁ EXISTE NA MEMÓRIA (PIDS IGUAIS)\033[0m\n");
                     sleep(1);
-                    system("clear");
+                    //system("clear");
                     break;
                 }
                 if (((NUM_TOTAL_PAG * TAMANHO_PAGINA) / KILOBYTE) < processo->tam)
@@ -188,7 +188,7 @@ int main()
                     printf("\033[38;5;196m");
                     printf("\n\t\t\033[6;1mSEGMENTO MAIOR QUE A MEMÓRIA\033[0m\n");
                     sleep(1);
-                    system("clear");
+                    //system("clear");
                     break;
                 }
                 carregou_memoria = finalizar_carregamento_memoria(processo, &cabeca_segmento, memoria);
@@ -210,7 +210,7 @@ int main()
                 printf("\033[38;5;196m");
                 printf("\n\t\t\033[6;1mNOME INVÁLIDO\033[0m\n");
                 sleep(1);
-                system("clear");
+                //system("clear");
             }
             break;
         }
@@ -242,7 +242,7 @@ int main()
         }
         case 4:
         {
-            system("clear");
+            //system("clear");
             printf("\033[38;5;206m");
 
             printf("\t\t                   ####        ####                \n");

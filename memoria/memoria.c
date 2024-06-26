@@ -1,4 +1,5 @@
 #include "memoria.h"
+#include <unistd.h>
 int id_seg = 0; // conta sequencialmente o id do segmento
 int id_pag = 0; // conta sequencialmente o id do segmento
 
@@ -356,7 +357,7 @@ int finalizar_carregamento_memoria(Processo *processo, Segmento **cabeca, Vetor_
         printf("\033[38;5;196m");
         printf("\n\t\t\033[6;1mO PROCESSO NÃO PODE SER INSERIDO - SEM ESPAÇO\033[0m\n");
         sleep(1);
-        system("clear");
+        //system("clear");
         return 0;
     }
     segmento->processo->status = 1;
@@ -379,7 +380,7 @@ void imprimir_segmento(Segmento *cabeca_seg, Vetor_tabela_pag *paginas)
         printf("\033[38;5;196m");
         printf("\n\t\t\033[6;1mSEM SEGMENTO\033[0m\n");
         sleep(1);
-        system("clear");
+        //system("clear");
         return;
     }
     int qtd_seg = 0;
@@ -413,5 +414,5 @@ void imprimir_segmento(Segmento *cabeca_seg, Vetor_tabela_pag *paginas)
     while ((tecla = getchar()) != '\n')
         ;
  
-    system("clear");
+    //system("clear");
 }

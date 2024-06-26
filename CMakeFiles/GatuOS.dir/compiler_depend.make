@@ -75,7 +75,14 @@ CMakeFiles/GatuOS.dir/ES/imprimir.c.o: ES/imprimir.c \
   /usr/include/alloca.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/string.h \
-  /usr/include/strings.h
+  /usr/include/strings.h \
+  /usr/include/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+  /usr/include/x86_64-linux-gnu/bits/environments.h \
+  /usr/include/x86_64-linux-gnu/bits/confname.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
 
 CMakeFiles/GatuOS.dir/disco/disco.c.o: disco/disco.c \
   /usr/include/stdc-predef.h \
@@ -151,7 +158,14 @@ CMakeFiles/GatuOS.dir/disco/disco.c.o: disco/disco.c \
   /usr/include/alloca.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/string.h \
-  /usr/include/strings.h
+  /usr/include/strings.h \
+  /usr/include/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+  /usr/include/x86_64-linux-gnu/bits/environments.h \
+  /usr/include/x86_64-linux-gnu/bits/confname.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
 
 CMakeFiles/GatuOS.dir/escalonador/rr.c.o: escalonador/rr.c \
   /usr/include/stdc-predef.h \
@@ -418,7 +432,14 @@ CMakeFiles/GatuOS.dir/memoria/memoria.c.o: memoria/memoria.c \
   /usr/include/alloca.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/string.h \
-  /usr/include/strings.h
+  /usr/include/strings.h \
+  /usr/include/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+  /usr/include/x86_64-linux-gnu/bits/environments.h \
+  /usr/include/x86_64-linux-gnu/bits/confname.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
 
 CMakeFiles/GatuOS.dir/processo/process.c.o: processo/process.c \
   /usr/include/stdc-predef.h \
@@ -493,7 +514,14 @@ CMakeFiles/GatuOS.dir/processo/process.c.o: processo/process.c \
   /usr/include/alloca.h \
   /usr/include/x86_64-linux-gnu/bits/stdlib-float.h \
   /usr/include/string.h \
-  /usr/include/strings.h
+  /usr/include/strings.h \
+  /usr/include/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+  /usr/include/x86_64-linux-gnu/bits/environments.h \
+  /usr/include/x86_64-linux-gnu/bits/confname.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
 
 CMakeFiles/GatuOS.dir/semaforo/semaforo.c.o: semaforo/semaforo.c \
   /usr/include/stdc-predef.h \
@@ -582,17 +610,17 @@ memoria/memoria.c:
 
 /usr/include/semaphore.h:
 
+disco/disco.c:
+
 /usr/include/x86_64-linux-gnu/bits/unistd_ext.h:
+
+disco/disco.h:
+
+/usr/include/x86_64-linux-gnu/bits/confname.h:
 
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
 
 /usr/include/unistd.h:
-
-/usr/include/x86_64-linux-gnu/bits/confname.h:
-
-disco/disco.h:
-
-disco/disco.c:
 
 /usr/include/strings.h:
 

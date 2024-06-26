@@ -1,5 +1,6 @@
 #include "disco.h"
 #include <pthread.h>
+#include <unistd.h>
 
 extern int relogio;
 int direcao;
@@ -18,12 +19,10 @@ void *disk_thread(void *arg)
     Trilhas **atual = args->atual;
     while (!(*HD)->cabeca_trilhas)
         ;
-
     while (1)
     {
         while (flag_disco)
         {
-            printf("A\n");
             elevador(HD, atual);
         }
     }
@@ -41,6 +40,8 @@ void iniciar_disco(Disco **HD, Trilhas **atual)
     Thread_disco disco;
 
     disco.HD = HD;
+    if (!HD)
+        printf("HD NULO\n");
     disco.atual = atual;
 
     if (pthread_create(&disco_thread, &disco_thread_atributo, disk_thread, &disco) != 0)

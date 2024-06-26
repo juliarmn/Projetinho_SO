@@ -1,5 +1,6 @@
 #include "rr.h"
 #include <semaphore.h>
+#include <unistd.h>
 extern int relogio;
 extern pthread_mutex_t mutex_interrupcao;
 extern int flag_interrupcao;
@@ -350,8 +351,10 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
         else if ((aux->processo->lista_instrucao->tipo == 1) &&
                  aux->processo->status != 0)
         {
+            aux->processo->status = 0;
             disk_request('r', *HD, aux->processo->lista_instrucao->num, aux->processo, atual);
-            aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
+            aux->processo->status = 1;
+            // aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
             if (flag_interrupcao == 1)
                 return;
 
@@ -367,8 +370,10 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
         else if ((aux->processo->lista_instrucao->tipo == 2) &&
                  aux->processo->status != 0)
         {
+            aux->processo->status = 0;
             disk_request('w', *HD, aux->processo->lista_instrucao->num, aux->processo, atual);
-            aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
+            aux->processo->status = 1;
+            // aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
             if (flag_interrupcao == 1)
                 return;
         }
@@ -396,8 +401,9 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
         {
             if (flag_interrupcao == 1)
                 return;
+            aux->processo->status = 0;
             iniciar_impressao(cabeca_print, aux->processo->lista_instrucao->num, aux->processo);
-            aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
+            // aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
         }
         if (!aux->processo->lista_instrucao->prox)
         {
@@ -421,10 +427,7 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
                 return;
         }
     }
-
-    // pthread_mutex_lock(&mutex_interrupcao);
     flag_interrupcao = 1;
-    // pthread_mutex_unlock(&mutex_interrupcao);
 }
 
 void print_lista_robin(Round_robin *robin)
@@ -439,7 +442,7 @@ void print_lista_robin(Round_robin *robin)
         printf("\033[38;5;196m");
         printf("\n\t\t\033[6;1mSEM PROCESSO\033[0m\n");
         sleep(1);
-        system("clear");
+        // system("clear");
         return;
     }
     printf("\033[38;5;206m");

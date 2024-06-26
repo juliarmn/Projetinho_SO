@@ -1,5 +1,6 @@
 #include "imprimir.h"
 #include <pthread.h>
+#include <unistd.h>
 extern int relogio;
 int flag_ES = 1;
 
@@ -17,13 +18,11 @@ void *ES_thread(void *arg)
     int tempo = args->tempo;
     Processo *processo = args->processo;
 
-    while (1)
+    while (flag_ES)
     {
-        while (flag_ES)
-        {
-            print_request(cabeca_print, tempo, processo);
-        }
+        print_request(cabeca_print, tempo, processo);
     }
+    processo->status = 0;
 
     return NULL;
 }

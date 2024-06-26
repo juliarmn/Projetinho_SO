@@ -1,4 +1,5 @@
 #include "processo.h"
+#include <unistd.h>
 extern int relogio; // contagem de tempo de criacao do processo
 
 /**
@@ -146,7 +147,7 @@ void imprimir_processo(Processo *processo)
         printf("\033[38;5;196m");
         printf("\n\t\t\033[6;1mSEM PROCESSO\033[0m\n");
         sleep(2);
-        system("clear");
+        //system("clear");
         return;
     }
     printf("\033[38;5;206m");

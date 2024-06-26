@@ -77,6 +77,13 @@ CMakeFiles/GatuOS.dir/ES/imprimir.c.o
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h
  /usr/include/string.h
  /usr/include/strings.h
+ /usr/include/unistd.h
+ /usr/include/x86_64-linux-gnu/bits/posix_opt.h
+ /usr/include/x86_64-linux-gnu/bits/environments.h
+ /usr/include/x86_64-linux-gnu/bits/confname.h
+ /usr/include/x86_64-linux-gnu/bits/getopt_posix.h
+ /usr/include/x86_64-linux-gnu/bits/getopt_core.h
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
 
 CMakeFiles/GatuOS.dir/disco/disco.c.o
  /home/jula/Projetinho_SO/disco/disco.c
@@ -154,6 +161,13 @@ CMakeFiles/GatuOS.dir/disco/disco.c.o
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h
  /usr/include/string.h
  /usr/include/strings.h
+ /usr/include/unistd.h
+ /usr/include/x86_64-linux-gnu/bits/posix_opt.h
+ /usr/include/x86_64-linux-gnu/bits/environments.h
+ /usr/include/x86_64-linux-gnu/bits/confname.h
+ /usr/include/x86_64-linux-gnu/bits/getopt_posix.h
+ /usr/include/x86_64-linux-gnu/bits/getopt_core.h
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
 
 CMakeFiles/GatuOS.dir/escalonador/rr.c.o
  /home/jula/Projetinho_SO/escalonador/rr.c
@@ -424,6 +438,13 @@ CMakeFiles/GatuOS.dir/memoria/memoria.c.o
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h
  /usr/include/string.h
  /usr/include/strings.h
+ /usr/include/unistd.h
+ /usr/include/x86_64-linux-gnu/bits/posix_opt.h
+ /usr/include/x86_64-linux-gnu/bits/environments.h
+ /usr/include/x86_64-linux-gnu/bits/confname.h
+ /usr/include/x86_64-linux-gnu/bits/getopt_posix.h
+ /usr/include/x86_64-linux-gnu/bits/getopt_core.h
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
 
 CMakeFiles/GatuOS.dir/processo/process.c.o
  /home/jula/Projetinho_SO/processo/process.c
@@ -500,6 +521,13 @@ CMakeFiles/GatuOS.dir/processo/process.c.o
  /usr/include/x86_64-linux-gnu/bits/stdlib-float.h
  /usr/include/string.h
  /usr/include/strings.h
+ /usr/include/unistd.h
+ /usr/include/x86_64-linux-gnu/bits/posix_opt.h
+ /usr/include/x86_64-linux-gnu/bits/environments.h
+ /usr/include/x86_64-linux-gnu/bits/confname.h
+ /usr/include/x86_64-linux-gnu/bits/getopt_posix.h
+ /usr/include/x86_64-linux-gnu/bits/getopt_core.h
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h
 
 CMakeFiles/GatuOS.dir/semaforo/semaforo.c.o
  /home/jula/Projetinho_SO/semaforo/semaforo.c
