@@ -11,7 +11,6 @@ int id_pag = 0; // conta sequencialmente o id do segmento
  */
 void inicializar_pag(Vetor_tabela_pag *tabela_paginas)
 {
-
     tabela_paginas->qtd_pag_livre = NUM_TOTAL_PAG;
     for (int i = 0; i < NUM_TOTAL_PAG; i++)
     {
@@ -248,7 +247,7 @@ void swap_out(Segmento *segmento, Segmento **cabeca_segmento, FILE *fp, Vetor_ta
         fprintf(fp, "%s\n", segmento->processo->nome);
         fprintf(fp, "%d\n", segmento->processo->pid);
         fprintf(fp, "%d\n", segmento->processo->prioridade);
-        fprintf(fp, "%d\n", segmento->processo->tam);
+        fprintf(fp, "%.0f\n", segmento->processo->tam);
         for (int i = 0; segmento->processo->lista_sem[i] != '\0'; i++)
             fprintf(fp, "%c ", segmento->processo->lista_sem[i]);
         fprintf(fp, "\n");

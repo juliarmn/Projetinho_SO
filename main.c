@@ -12,7 +12,6 @@ sem_t ler;
 int flag_interrupcao = 0;
 int imprime_robin = 0;
 
-
 void imprime_logo()
 {
     system("clear");
@@ -64,8 +63,8 @@ typedef struct
     Segmento **cabeca_seg;
     Segmento **remover;
     Vetor_tabela_pag *memoria;
-    Disco **HD; 
-    Trilhas **atual; 
+    Disco **HD;
+    Trilhas **atual;
     Print_request **cabeca_print;
 } ThreadArgs;
 
@@ -77,8 +76,8 @@ void *round_robin_thread(void *arg)
     Segmento **cabeca_segmento = args->cabeca_seg;
     Segmento **remover_seg = args->cabeca_seg;
     Vetor_tabela_pag *memoria = args->memoria;
-    Disco **HD = args->HD; 
-    Trilhas **atual = args->atual; 
+    Disco **HD = args->HD;
+    Trilhas **atual = args->atual;
     Print_request **cabeca_print = args->cabeca_print;
     while (!(*cabeca_robin) && !(*cabeca_sem))
         ;
@@ -86,7 +85,7 @@ void *round_robin_thread(void *arg)
     {
         while (!flag_interrupcao && cabeca_robin && cabeca_sem)
         {
-            robin_robin_atende(cabeca_robin, cabeca_sem, cabeca_segmento, remover_seg, memoria, *HD, atual, cabeca_print);
+            robin_robin_atende(cabeca_robin, cabeca_sem, memoria, cabeca_segmento, remover_seg, HD, atual, cabeca_print);
         }
     }
 
@@ -109,7 +108,7 @@ int main()
     ThreadArgs thread_argumento;
 
     Segmento *cabeca_segmento = NULL, *remover = NULL;
-    Vetor_tabela_pag memoria[NUM_TOTAL_PAG];
+    Vetor_tabela_pag *memoria = malloc(NUM_TOTAL_PAG * sizeof(Vetor_tabela_pag));
     inicializar_pag(memoria);
 
     Semaforo *cabeca_semaforo = NULL, *rabo_semaforo = NULL;
@@ -134,7 +133,7 @@ int main()
     thread_argumento.cabeca_sem = &cabeca_semaforo;
     thread_argumento.cabeca_seg = &cabeca_segmento;
     thread_argumento.remover = &remover;
-    thread_argumento.memoria = &memoria;
+    thread_argumento.memoria = memoria;
     thread_argumento.HD = &HD;
     thread_argumento.cabeca_print = &cabeca_print;
     thread_argumento.atual = &atual;
@@ -162,7 +161,8 @@ int main()
 
         switch (op)
         {
-        case 1: {
+        case 1:
+        {
             if (cabeca_robin != NULL)
                 flag_interrupcao = 1;
             imprime_logo();
@@ -214,7 +214,8 @@ int main()
             }
             break;
         }
-        case 2: {
+        case 2:
+        {
             tecla = getchar();
 
             imprime_logo();
@@ -232,13 +233,15 @@ int main()
             }
             break;
         }
-        case 3: {
+        case 3:
+        {
             tecla = getchar();
             imprime_logo();
             imprimir_segmento(cabeca_segmento, memoria);
             break;
         }
-        case 4: {
+        case 4:
+        {
             system("clear");
             printf("\033[38;5;206m");
 
@@ -262,7 +265,8 @@ int main()
             printf("\n\t\t\t\t\t\033[900;1mADEUS\033[0m\n");
             return 0;
         }
-        default: {
+        default:
+        {
             break;
         }
         }

@@ -16,13 +16,14 @@ void *disk_thread(void *arg)
     Thread_disco *args = (Thread_disco *)arg;
     Disco **HD = args->HD;
     Trilhas **atual = args->atual;
-
     while (!(*HD)->cabeca_trilhas)
         ;
+
     while (1)
     {
         while (flag_disco)
         {
+            printf("A\n");
             elevador(HD, atual);
         }
     }
@@ -84,6 +85,8 @@ void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilha
         {
             inserir_trilha(num_trilha, &HD, processo);
             *atual = HD->cabeca_trilhas;
+        } else {
+            return;
         }
     }
 
