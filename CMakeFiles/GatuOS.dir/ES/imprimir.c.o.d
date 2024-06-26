@@ -1,9 +1,8 @@
-CMakeFiles/GatuOS.dir/memoria/memoria.c.o: \
- /home/jula/Projetinho_SO/memoria/memoria.c /usr/include/stdc-predef.h \
- /home/jula/Projetinho_SO/memoria/memoria.h \
- /home/jula/Projetinho_SO/memoria/../processo/processo.h \
- /usr/include/locale.h /usr/include/features.h \
- /usr/include/features-time64.h \
+CMakeFiles/GatuOS.dir/ES/imprimir.c.o: \
+ /home/jula/Projetinho_SO/ES/imprimir.c /usr/include/stdc-predef.h \
+ /home/jula/Projetinho_SO/ES/imprimir.h \
+ /home/jula/Projetinho_SO/ES/../processo/processo.h /usr/include/locale.h \
+ /usr/include/features.h /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/bits/timesize.h \
  /usr/include/x86_64-linux-gnu/sys/cdefs.h \

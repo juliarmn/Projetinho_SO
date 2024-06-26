@@ -12,9 +12,55 @@ sem_t ler;
 int flag_interrupcao = 0;
 int imprime_robin = 0;
 
+int main()
+{
+    Print_request *cabeca = NULL, *aux;
+    FILE *fp;
+    Processo *processo = NULL;
+    fp = abrir_arquivo("processo/processo.txt");
 
-int main () {
-    
+    if (fp)
+    {
+        processo = criar_processo(fp, processo);
+        inserir_lista(&cabeca, 20, processo);
+    }
+
+    fp = abrir_arquivo("processo/processo.txt");
+
+    if (fp)
+    {
+        processo = criar_processo(fp, processo);
+        inserir_lista(&cabeca, 10, processo);
+    }
+    fp = abrir_arquivo("processo/processo.txt");
+
+    if (fp)
+    {
+        processo = criar_processo(fp, processo);
+        inserir_lista(&cabeca, 12, processo);
+    }
+
+    fp = abrir_arquivo("processo/processo.txt");
+
+    if (fp)
+    {
+        processo = criar_processo(fp, processo);
+        inserir_lista(&cabeca, 11, processo);
+    }
+
+    free(atender_lista(&cabeca));
+    free(atender_lista(&cabeca));
+
+    free(atender_lista(&cabeca));
+
+    free(atender_lista(&cabeca));
+
+    aux = cabeca;
+    while (aux)
+    {
+        printf("%d\n", aux->tempo);
+        aux = aux->prox;
+    }
 }
 
 /*

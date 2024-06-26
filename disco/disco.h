@@ -26,6 +26,15 @@ typedef struct d {
     Fila_Request *fila;
 } Disco;
 
+void disk_finish(Processo *processo);
+void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilhas **atual);
+int trilha_existe(Disco *HD, int num_trilha);
+void inserir_trilha(int num_trilha, Disco **HD);
+void inserir_fila_espera(Disco **HD, Processo *processo, int num_trilha, int prioridade, char op);
+Fila_Request *atender_fila(Disco **HD, int num_trilha);
+Trilhas *buscar_trilha(int num_trilha, Disco *HD);
+void ler_processo(Disco *HD, int num_trilha);
+void elevador(Disco **HD, Trilhas **atual);
 
 
 #endif  

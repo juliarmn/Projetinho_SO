@@ -123,7 +123,7 @@ void inserir_fila_espera(Disco **HD, Processo *processo, int num_trilha, int pri
         return;
     } 
 
-    if (prioridade < (*HD)->fila) {
+    if (prioridade < (*HD)->fila->prioridade) {
         novo->prox = (*HD)->fila;
         (*HD)->fila = novo;
         return;

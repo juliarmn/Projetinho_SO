@@ -6,3 +6,4 @@ O que falta?
 4 - thread Disco
 5 - chamar no scheduller
 6 - main
+7 - testar Disco

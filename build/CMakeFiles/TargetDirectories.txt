@@ -1,3 +1,0 @@
-/home/juliarmn/Projetinho_SO/build/CMakeFiles/GatuOS.dir
-/home/juliarmn/Projetinho_SO/build/CMakeFiles/edit_cache.dir
-/home/juliarmn/Projetinho_SO/build/CMakeFiles/rebuild_cache.dir

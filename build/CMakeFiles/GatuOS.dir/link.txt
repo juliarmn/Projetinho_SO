@@ -1,1 +1,0 @@
-/usr/bin/cc  -pthread -Wall -lncurses -g -g CMakeFiles/GatuOS.dir/main.c.o CMakeFiles/GatuOS.dir/processo/process.c.o CMakeFiles/GatuOS.dir/escalonador/rr.c.o CMakeFiles/GatuOS.dir/memoria/memoria.c.o CMakeFiles/GatuOS.dir/semaforo/semaforo.c.o CMakeFiles/GatuOS.dir/disco/disco.c.o -o GatuOS 

@@ -11,6 +11,7 @@ void inserir_lista(Print_request **cabeca_print, int tempo, Processo *processo)
     {
         *cabeca_print = novo;
         novo->prox = NULL;
+        return;
     }
 
     if (tempo < (*cabeca_print)->tempo)
@@ -23,18 +24,12 @@ void inserir_lista(Print_request **cabeca_print, int tempo, Processo *processo)
     Print_request *aux = *cabeca_print;
     Print_request *aux_ant = aux;
 
-    while (aux->prox)
+     while (aux->prox && aux->prox->tempo < tempo)
     {
-        if (aux->tempo >= tempo)
-        {
-            novo->prox = aux;
-            aux_ant->prox = novo;
-            return;
-        }
-        aux_ant = aux;
         aux = aux->prox;
     }
 
+    novo->prox = aux->prox;
     aux->prox = novo;
 }
 

@@ -1,7 +1,7 @@
-CMakeFiles/GatuOS.dir/memoria/memoria.c.o: \
- /home/jula/Projetinho_SO/memoria/memoria.c /usr/include/stdc-predef.h \
- /home/jula/Projetinho_SO/memoria/memoria.h \
- /home/jula/Projetinho_SO/memoria/../processo/processo.h \
+CMakeFiles/GatuOS.dir/disco/disco.c.o: \
+ /home/jula/Projetinho_SO/disco/disco.c /usr/include/stdc-predef.h \
+ /home/jula/Projetinho_SO/disco/disco.h \
+ /home/jula/Projetinho_SO/disco/../processo/processo.h \
  /usr/include/locale.h /usr/include/features.h \
  /usr/include/features-time64.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
