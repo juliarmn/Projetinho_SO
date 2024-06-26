@@ -3,7 +3,6 @@
 extern int relogio;
  int direcao;
 
-// Fazer a print 1 e 2
 
 void disk_finish(Processo *processo)
 {
@@ -12,19 +11,26 @@ void disk_finish(Processo *processo)
     processo->status = 1;
 }
 
-void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilhas *atual)
+void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilhas **atual)
 {
     processo->status = 0;
     int prioridade;
 
-    if (atual->num_trilha < num_trilha && direcao == 1)
-        prioridade = num_trilha - atual->num_trilha;
-    else if (atual->num_trilha < num_trilha && direcao == 1)
-        prioridade = (HD->ultima_trilha - atual->num_trilha) + (HD->ultima_trilha - num_trilha);
-    else if (atual->num_trilha < num_trilha && direcao == 2) 
-        prioridade = (HD->ultima_trilha - atual->num_trilha) + (HD->ultima_trilha - num_trilha);
-    else if (atual->num_trilha > num_trilha && direcao == 2)
-        prioridade = (-1) * (num_trilha - atual->num_trilha);
+    if (!(*atual)) {
+        if (op == 'w') {
+            inserir_trilha(num_trilha, &HD);
+            *atual = HD->cabeca_trilhas;
+        }
+    }
+
+    if ((*atual)->num_trilha < num_trilha && direcao == 1)
+        prioridade = num_trilha - (*atual)->num_trilha;
+    else if ((*atual)->num_trilha < num_trilha && direcao == 1)
+        prioridade = (HD->ultima_trilha - (*atual)->num_trilha) + (HD->ultima_trilha - num_trilha);
+    else if ((*atual)->num_trilha < num_trilha && direcao == 2) 
+        prioridade = (HD->ultima_trilha - (*atual)->num_trilha) + (HD->ultima_trilha - num_trilha);
+    else if ((*atual)->num_trilha > num_trilha && direcao == 2)
+        prioridade = (-1) * (num_trilha - (*atual)->num_trilha);
     
     inserir_fila_espera(&HD, processo, num_trilha, prioridade, op);
 }

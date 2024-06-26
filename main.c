@@ -3,6 +3,8 @@
 #include "memoria/memoria.h"
 #include "processo/processo.h"
 #include "semaforo/semaforo.h"
+#include "disco/disco.h"
+#include "ES/imprimir.h"
 #include <semaphore.h>
 int relogio = 0;
 pthread_cond_t condicao_interrupcao = PTHREAD_COND_INITIALIZER;
@@ -11,6 +13,10 @@ sem_t ler;
 int flag_interrupcao = 0;
 int imprime_robin = 0;
 
+
+
+
+/*
 void imprime_logo()
 {
     system("clear");
@@ -249,3 +255,4 @@ int main()
     pthread_exit(NULL);
     return 0;
 }
+*/

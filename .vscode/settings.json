@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "disco.h": "c"
+        "disco.h": "c",
+        "imprimir.h": "c"
     }
 }

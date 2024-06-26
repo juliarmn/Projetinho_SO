@@ -1,0 +1,8 @@
+O que falta?
+
+1 - Testar a print
+2 - Colocar thread - interrupt caso haja insercao
+3 - Disco quando primeiro
+4 - thread Disco
+5 - chamar no scheduller
+6 - main
