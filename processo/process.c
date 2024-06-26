@@ -119,13 +119,13 @@ Processo *criar_processo(FILE *fp, Processo *processo)
                 aux->tipo = 5;
 
             fscanf(fp, "%d", &aux->num);
-            aux->semaforo = '\0'; // Nao tem char
+            aux->semaforo = '\0';
         }
 
         processo->lista_instrucao = processo->cabeca_instrucao;
     }
 
-    processo->criacao = relogio++; // atualiza relogio
+    processo->criacao = relogio++;
     return processo;
 }
 

@@ -70,6 +70,10 @@ CMakeFiles/GatuOS.dir/escalonador/rr.c.o: \
  /home/jula/Projetinho_SO/escalonador/../semaforo/../memoria/memoria.h \
  /home/jula/Projetinho_SO/escalonador/../semaforo/../memoria/../processo/processo.h \
  /home/jula/Projetinho_SO/escalonador/../semaforo/../processo/processo.h \
+ /home/jula/Projetinho_SO/escalonador/../disco/disco.h \
+ /home/jula/Projetinho_SO/escalonador/../disco/../processo/processo.h \
+ /home/jula/Projetinho_SO/escalonador/../ES/imprimir.h \
+ /home/jula/Projetinho_SO/escalonador/../ES/../processo/processo.h \
  /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
  /usr/include/x86_64-linux-gnu/bits/environments.h \
  /usr/include/x86_64-linux-gnu/bits/confname.h \

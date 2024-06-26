@@ -1,9 +1,9 @@
 O que falta?
 
 1 - Testar a print - OK
-2 - Colocar thread - interrupt caso haja insercao
+2 - Colocar thread - interrupt caso haja insercao - OK
 3 - Disco quando primeiro - OK
-4 - thread Disco
-5 - chamar no scheduller
+4 - thread Disco- OK
+5 - chamar no scheduller - OK
 6 - main
 7 - testar Disco - OK

@@ -232,6 +232,10 @@ CMakeFiles/GatuOS.dir/escalonador/rr.c.o: escalonador/rr.c \
   memoria/memoria.h \
   processo/processo.h \
   processo/processo.h \
+  disco/disco.h \
+  processo/processo.h \
+  ES/imprimir.h \
+  processo/processo.h \
   /usr/include/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
   /usr/include/x86_64-linux-gnu/bits/environments.h \
@@ -321,6 +325,10 @@ CMakeFiles/GatuOS.dir/main.c.o: main.c \
   memoria/memoria.h \
   processo/processo.h \
   processo/processo.h \
+  disco/disco.h \
+  processo/processo.h \
+  ES/imprimir.h \
+  processo/processo.h \
   /usr/include/unistd.h \
   /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
   /usr/include/x86_64-linux-gnu/bits/environments.h \
@@ -332,9 +340,7 @@ CMakeFiles/GatuOS.dir/main.c.o: main.c \
   processo/processo.h \
   semaforo/semaforo.h \
   disco/disco.h \
-  processo/processo.h \
   ES/imprimir.h \
-  processo/processo.h \
   /usr/include/semaphore.h \
   /usr/include/x86_64-linux-gnu/bits/semaphore.h
 

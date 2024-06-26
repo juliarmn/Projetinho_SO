@@ -3,6 +3,8 @@
 //#include "../Interface/interface.h"
 #include "../processo/processo.h"
 #include "../semaforo/semaforo.h"
+#include "../disco/disco.h"
+#include "../ES/imprimir.h"
 #include <locale.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -30,7 +32,7 @@ void inserir_round_robin(Round_robin **cabeca, Processo *elemento);
 int remover(Round_robin **cabeca, Processo *elemento, Vetor_tabela_pag *memoria, Segmento **cabeca_seg, Segmento **remover_seg);
 Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **cabeca_sem);
 Round_robin *atender_semaforo(Round_robin *atendido, Semaforo **cabeca_sem, char tipo);
-void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabela_pag *memoria, Segmento **cabeca_seg, Segmento **remover_seg);
+void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabela_pag *memoria, Segmento **cabeca_seg, Segmento **remover_seg, Disco *HD, Trilhas **atual, Print_request **cabeca_print);
 void print_lista_robin(Round_robin *cabeca);
 
 #endif

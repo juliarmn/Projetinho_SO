@@ -64,6 +64,9 @@ typedef struct
     Segmento **cabeca_seg;
     Segmento **remover;
     Vetor_tabela_pag *memoria;
+    Disco **HD; 
+    Trilhas **atual; 
+    Print_request **cabeca_print;
 } ThreadArgs;
 
 void *round_robin_thread(void *arg)
@@ -74,13 +77,16 @@ void *round_robin_thread(void *arg)
     Segmento **cabeca_segmento = args->cabeca_seg;
     Segmento **remover_seg = args->cabeca_seg;
     Vetor_tabela_pag *memoria = args->memoria;
+    Disco **HD = args->HD; 
+    Trilhas **atual = args->atual; 
+    Print_request **cabeca_print = args->cabeca_print;
     while (!(*cabeca_robin) && !(*cabeca_sem))
         ;
     while (1)
     {
         while (!flag_interrupcao && cabeca_robin && cabeca_sem)
         {
-            robin_robin_atende(cabeca_robin, cabeca_sem, cabeca_segmento, remover_seg, memoria);
+            robin_robin_atende(cabeca_robin, cabeca_sem, cabeca_segmento, remover_seg, memoria, *HD, atual, cabeca_print);
         }
     }
 
@@ -112,6 +118,15 @@ int main()
 
     Round_robin *cabeca_robin = NULL;
 
+    Disco *HD = malloc(sizeof(Disco));
+    Trilhas *atual = NULL;
+    HD->cabeca_trilhas = NULL;
+    HD->fila = NULL;
+    HD->tam_fila = 0;
+    HD->ultima_trilha = 0;
+
+    Print_request *cabeca_print = NULL;
+
     int op, carregou_memoria;
     int existe_memoria;
 
@@ -120,6 +135,9 @@ int main()
     thread_argumento.cabeca_seg = &cabeca_segmento;
     thread_argumento.remover = &remover;
     thread_argumento.memoria = &memoria;
+    thread_argumento.HD = &HD;
+    thread_argumento.cabeca_print = &cabeca_print;
+    thread_argumento.atual = &atual;
 
     if (pthread_create(&thread, &thread_atributo, round_robin_thread, &thread_argumento) != 0)
     {
@@ -129,6 +147,8 @@ int main()
         system("clear");
         return 1;
     }
+
+    iniciar_disco(&HD, &atual);
     do
     {
         op = menu();
@@ -203,7 +223,8 @@ int main()
             sem_wait(&ler);
             imprime_robin = 1;
             sem_post(&ler);
-            if (tecla = getchar() == '\n')
+            tecla = getchar();
+            if (tecla == '\n')
             {
                 sem_wait(&ler);
                 imprime_robin = 0;

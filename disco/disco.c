@@ -2,20 +2,59 @@
 #include <pthread.h>
 
 extern int relogio;
- int direcao;
+int direcao;
+int flag_disco = 1;
 
- void iniciar_disco () {
+typedef struct arg_disk
+{
+    Trilhas **atual;
+    Disco **HD;
+} Thread_disco;
+
+void *disk_thread(void *arg)
+{
+    Thread_disco *args = (Thread_disco *)arg;
+    Disco **HD = args->HD;
+    Trilhas **atual = args->atual;
+
+    while (!(*HD)->cabeca_trilhas)
+        ;
+    while (1)
+    {
+        while (flag_disco)
+        {
+            elevador(HD, atual);
+        }
+    }
+
+    return NULL;
+}
+
+void iniciar_disco(Disco **HD, Trilhas **atual)
+{
     pthread_t disco_thread;
     pthread_attr_t disco_thread_atributo;
     pthread_attr_init(&disco_thread_atributo);
-    pthread_attr_setscope(&disco_thread_atributo, PTHREAD_SCOPE_SYSTEM); 
+    pthread_attr_setscope(&disco_thread_atributo, PTHREAD_SCOPE_SYSTEM);
 
-    
- }
+    Thread_disco disco;
+
+    disco.HD = HD;
+    disco.atual = atual;
+
+    if (pthread_create(&disco_thread, &disco_thread_atributo, disk_thread, &disco) != 0)
+    {
+        printf("\033[38;5;196m");
+        printf("\n\t\t\033[6;1mNÃO CRIOU A THREAD PARA DISCO\033[0m\n");
+        sleep(1);
+        system("clear");
+        return;
+    }
+}
 
 /**
  * @param Processo * processo que chamou
-*/
+ */
 void disk_finish(Processo *processo)
 {
     printf("\033[38;5;206m");
@@ -29,18 +68,20 @@ void disk_finish(Processo *processo)
  * @param int num da trilha
  * @param Processo processo da request
  * @param Trilhas ** atual do elevador
- * 
+ *
  * Calcula prioridade e chama para colocar na fila
- * 
+ *
  * @return void
-*/
+ */
 void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilhas **atual)
 {
     processo->status = 0;
     int prioridade;
 
-    if (!(*atual)) {
-        if (op == 'w') {
+    if (!(*atual))
+    {
+        if (op == 'w')
+        {
             inserir_trilha(num_trilha, &HD, processo);
             *atual = HD->cabeca_trilhas;
         }
@@ -50,22 +91,22 @@ void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilha
         prioridade = num_trilha - (*atual)->num_trilha;
     else if ((*atual)->num_trilha < num_trilha && direcao == 1)
         prioridade = (HD->ultima_trilha - (*atual)->num_trilha) + (HD->ultima_trilha - num_trilha);
-    else if ((*atual)->num_trilha < num_trilha && direcao == 2) 
+    else if ((*atual)->num_trilha < num_trilha && direcao == 2)
         prioridade = (HD->ultima_trilha - (*atual)->num_trilha) + (HD->ultima_trilha - num_trilha);
     else if ((*atual)->num_trilha > num_trilha && direcao == 2)
         prioridade = (-1) * (num_trilha - (*atual)->num_trilha);
-    
+
     inserir_fila_espera_disco(&HD, processo, num_trilha, prioridade, op);
 }
 
 /**
  * @param Disco * disco que verificamos
  * @param int numero da trilha
- * 
+ *
  * Verifica se a trilha já existe, para não sobrescrever
- * 
+ *
  * @return int 1 para sim 0 para nao
-*/
+ */
 int trilha_existe(Disco *HD, int num_trilha)
 {
     if (!HD->cabeca_trilhas)
@@ -81,7 +122,7 @@ int trilha_existe(Disco *HD, int num_trilha)
         {
             return 1;
         }
-        aux  = aux->prox;
+        aux = aux->prox;
     }
     return 0;
 }
@@ -90,11 +131,11 @@ int trilha_existe(Disco *HD, int num_trilha)
  * @param int numero da trilha que vai escrever
  * @param Disco
  * @param Processo * que vai ser escrito
- * 
+ *
  * Insere na trilha a escrita
- * 
+ *
  * @return void
-*/
+ */
 void inserir_trilha(int num_trilha, Disco **HD, Processo *processo)
 {
     if (trilha_existe((*HD), num_trilha))
@@ -150,11 +191,11 @@ void inserir_trilha(int num_trilha, Disco **HD, Processo *processo)
  * @param int num_trilha para operacao
  * @param int prioridade para entrar na fila - contrario, menor num, mais na frente fica
  * @param char op 'r' para read e 'w' para write
- * 
+ *
  * Insere na fila de request do disco por prioridade
- * 
+ *
  * @return void
-*/
+ */
 void inserir_fila_espera_disco(Disco **HD, Processo *processo, int num_trilha, int prioridade, char op)
 {
     Fila_Request *novo = malloc(sizeof(Fila_Request));
@@ -166,12 +207,14 @@ void inserir_fila_espera_disco(Disco **HD, Processo *processo, int num_trilha, i
 
     Fila_Request *aux, *aux_ant;
 
-    if (!(*HD)->fila) {
+    if (!(*HD)->fila)
+    {
         (*HD)->fila = novo;
         return;
-    } 
+    }
 
-    if (prioridade < (*HD)->fila->prioridade) {
+    if (prioridade < (*HD)->fila->prioridade)
+    {
         novo->prox = (*HD)->fila;
         (*HD)->fila = novo;
         return;
@@ -180,12 +223,14 @@ void inserir_fila_espera_disco(Disco **HD, Processo *processo, int num_trilha, i
     aux = (*HD)->fila;
     aux_ant = NULL;
 
-    while (aux != NULL && prioridade >= aux->prioridade) {
+    while (aux != NULL && prioridade >= aux->prioridade)
+    {
         aux_ant = aux;
         aux = aux->prox;
     }
 
-    if (aux_ant != NULL) {
+    if (aux_ant != NULL)
+    {
         aux_ant->prox = novo;
     }
 
@@ -194,18 +239,20 @@ void inserir_fila_espera_disco(Disco **HD, Processo *processo, int num_trilha, i
 
 /**
  * @param Disco **
- * 
+ *
  * Atende o primeiro
- * 
+ *
  * @return Elemento atendido
-*/
-Fila_Request *atender_fila(Disco **HD)
+ */
+Fila_Request *atender_fila(Disco **HD, Trilhas **atual)
 {
     Fila_Request *aux = (*HD)->fila;
 
-   if (aux->op == 'w')
+    if (aux->op == 'w')
     {
-      inserir_trilha((*HD)->fila->num_trilha, (*HD), (*HD)->fila->processo);
+        flag_disco = 0;
+        inserir_trilha((*HD)->fila->num_trilha, HD, (*HD)->fila->processo);
+        iniciar_disco(HD, atual);
     }
     else
     {
@@ -222,11 +269,11 @@ Fila_Request *atender_fila(Disco **HD)
 /**
  * @param int numero da trilha
  * @param Disco *HD
- * 
+ *
  * Busca a trilha no disco
- * 
+ *
  * @return *Trilha achada ou NULL se nao
-*/
+ */
 Trilhas *buscar_trilha(int num_trilha, Disco *HD)
 {
     if (!(*HD).cabeca_trilhas)
@@ -249,11 +296,11 @@ Trilhas *buscar_trilha(int num_trilha, Disco *HD)
 /**
  * @param Disco HD
  * @param int numero da trilha
- * 
+ *
  * Le o processo no disco
- * 
+ *
  * @return void
-*/
+ */
 void ler_processo(Disco *HD, int num_trilha)
 {
     Processo *processo;
@@ -278,20 +325,22 @@ void ler_processo(Disco *HD, int num_trilha)
 /**
  * @param Disco**
  * @param Trilhas ** ponteiro atual
- * 
+ *
  * Modifica o ponteiro atual e atende quando chega na requisicao
- * 
+ *
  * @return void
-*/
+ */
 void elevador(Disco **HD, Trilhas **atual)
 {
-    direcao = 1;// 1 tá indo e 2 voltando
+    direcao = 1; // 1 tá indo e 2 voltando
     while (1)
     {
+        if (flag_disco == 0)
+            return;
         sleep(1);
         if ((*atual)->num_trilha == (*HD)->fila->num_trilha)
         {
-            atender_fila(HD);
+            atender_fila(HD, atual);
         }
 
         if (!(*atual)->prox && !(*atual)->ant)
@@ -317,4 +366,3 @@ void elevador(Disco **HD, Trilhas **atual)
         }
     }
 }
-

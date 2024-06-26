@@ -1,24 +1,63 @@
 #include "imprimir.h"
 #include <pthread.h>
 extern int relogio;
+int flag_ES = 1;
 
+typedef struct arg_disk
+{
+    Print_request **cabeca_print;
+    int tempo;
+    Processo *processo;
+} Thread_ES;
 
- void iniciar_impressao () {
+void *ES_thread(void *arg)
+{
+    Thread_ES *args = (Thread_ES *)arg;
+    Print_request **cabeca_print = args->cabeca_print;
+    int tempo = args->tempo;
+    Processo *processo = args->processo;
+
+    while (1)
+    {
+        while (flag_ES)
+        {
+            print_request(cabeca_print, tempo, processo);
+        }
+    }
+
+    return NULL;
+}
+
+void iniciar_impressao(Print_request **cabeca_print, int tempo, Processo *processo)
+{
     pthread_t es_thread;
     pthread_attr_t es_thread_atributo;
     pthread_attr_init(&es_thread_atributo);
-    pthread_attr_setscope(&es_thread_atributo, PTHREAD_SCOPE_SYSTEM); 
+    pthread_attr_setscope(&es_thread_atributo, PTHREAD_SCOPE_SYSTEM);
 
-    
- }
+    Thread_ES es;
+
+    es.cabeca_print = cabeca_print;
+    es.tempo = tempo;
+    es.processo = processo;
+
+    if (pthread_create(&es_thread, &es_thread_atributo, ES_thread, &es) != 0)
+    {
+        printf("\033[38;5;196m");
+        printf("\n\t\t\033[6;1mNÃO CRIOU A THREAD PARA DISCO\033[0m\n");
+        sleep(1);
+        system("clear");
+        return;
+    }
+}
 
 /**
  * @param Print_request ** cabeca da lista de request
  * @param int tempo de impressao
  * @param Processo * processo da impressao
- * 
+ *
  * Insere na lista de request (fila prioritaria pelo tempo - menor primeiro)
- * 
+ *
  * @return void
  * */
 void inserir_lista(Print_request **cabeca_print, int tempo, Processo *processo)
@@ -42,9 +81,8 @@ void inserir_lista(Print_request **cabeca_print, int tempo, Processo *processo)
     }
 
     Print_request *aux = *cabeca_print;
-    Print_request *aux_ant = aux;
 
-     while (aux->prox && aux->prox->tempo < tempo)
+    while (aux->prox && aux->prox->tempo < tempo)
     {
         aux = aux->prox;
     }
@@ -55,11 +93,11 @@ void inserir_lista(Print_request **cabeca_print, int tempo, Processo *processo)
 
 /**
  * @param Print_request ** cabeca da lista de request
- * 
+ *
  * Atende o prioritário - primeiro
- * 
+ *
  * @return elemento atendido
-*/
+ */
 Print_request *atender_lista(Print_request **cabeca_print)
 {
     Print_request *aux = *cabeca_print;
@@ -72,11 +110,11 @@ Print_request *atender_lista(Print_request **cabeca_print)
  * @param Print_request ** cabeca da lista de request
  * @param int tempo de impressao
  * @param Processo * processo para entrar na lista
- * 
+ *
  * Se não tiver ninguem imprime, caso contrario coloca na lista
- * 
+ *
  * @return void
-*/
+ */
 void print_request(Print_request **cabeca_print, int tempo, Processo *processo)
 {
     int print = tempo / 1000;
@@ -86,7 +124,7 @@ void print_request(Print_request **cabeca_print, int tempo, Processo *processo)
         printf("Processo %s e PID %d impresso em %d unidade de tempo.\n", processo->nome, processo->pid, tempo);
         return;
     }
-
+    flag_ES = 0;
     inserir_lista(cabeca_print, tempo, processo);
     print_finish(cabeca_print, processo);
 }
@@ -95,15 +133,15 @@ void print_request(Print_request **cabeca_print, int tempo, Processo *processo)
 /**
  * @param Print_request ** cabeca da lista de request
  * @param Processo * processo para entrar na lista
- * 
+ *
  * Enquanto tiver request de impressao atende
- * 
+ *
  * @return void
-*/
+ */
 void print_finish(Print_request **cabeca_print, Processo *processo)
 {
     Print_request *aux;
-    while ((*cabeca_print))
+    while ((*cabeca_print) && flag_ES)
     {
         aux = atender_lista(cabeca_print);
         printf("Processo %s e PID %d impresso em %d unidade de tempo.\n", aux->processo->nome, aux->processo->pid, aux->tempo);

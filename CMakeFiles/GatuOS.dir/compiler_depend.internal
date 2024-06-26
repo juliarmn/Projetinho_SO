@@ -235,6 +235,10 @@ CMakeFiles/GatuOS.dir/escalonador/rr.c.o
  /home/jula/Projetinho_SO/memoria/memoria.h
  /home/jula/Projetinho_SO/processo/processo.h
  /home/jula/Projetinho_SO/processo/processo.h
+ /home/jula/Projetinho_SO/disco/disco.h
+ /home/jula/Projetinho_SO/processo/processo.h
+ /home/jula/Projetinho_SO/ES/imprimir.h
+ /home/jula/Projetinho_SO/processo/processo.h
  /usr/include/unistd.h
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h
  /usr/include/x86_64-linux-gnu/bits/environments.h
@@ -325,6 +329,10 @@ CMakeFiles/GatuOS.dir/main.c.o
  /home/jula/Projetinho_SO/memoria/memoria.h
  /home/jula/Projetinho_SO/processo/processo.h
  /home/jula/Projetinho_SO/processo/processo.h
+ /home/jula/Projetinho_SO/disco/disco.h
+ /home/jula/Projetinho_SO/processo/processo.h
+ /home/jula/Projetinho_SO/ES/imprimir.h
+ /home/jula/Projetinho_SO/processo/processo.h
  /usr/include/unistd.h
  /usr/include/x86_64-linux-gnu/bits/posix_opt.h
  /usr/include/x86_64-linux-gnu/bits/environments.h
@@ -336,9 +344,7 @@ CMakeFiles/GatuOS.dir/main.c.o
  /home/jula/Projetinho_SO/processo/processo.h
  /home/jula/Projetinho_SO/semaforo/semaforo.h
  /home/jula/Projetinho_SO/disco/disco.h
- /home/jula/Projetinho_SO/processo/processo.h
  /home/jula/Projetinho_SO/ES/imprimir.h
- /home/jula/Projetinho_SO/processo/processo.h
  /usr/include/semaphore.h
  /usr/include/x86_64-linux-gnu/bits/semaphore.h
 
