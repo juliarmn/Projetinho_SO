@@ -1,7 +1,17 @@
 #include "disco.h"
+#include <pthread.h>
 
 extern int relogio;
  int direcao;
+
+ void iniciar_disco () {
+    pthread_t disco_thread;
+    pthread_attr_t disco_thread_atributo;
+    pthread_attr_init(&disco_thread_atributo);
+    pthread_attr_setscope(&disco_thread_atributo, PTHREAD_SCOPE_SYSTEM); 
+
+    
+ }
 
 /**
  * @param Processo * processo que chamou

@@ -1,5 +1,16 @@
 #include "imprimir.h"
+#include <pthread.h>
 extern int relogio;
+
+
+ void iniciar_impressao () {
+    pthread_t es_thread;
+    pthread_attr_t es_thread_atributo;
+    pthread_attr_init(&es_thread_atributo);
+    pthread_attr_setscope(&es_thread_atributo, PTHREAD_SCOPE_SYSTEM); 
+
+    
+ }
 
 /**
  * @param Print_request ** cabeca da lista de request
