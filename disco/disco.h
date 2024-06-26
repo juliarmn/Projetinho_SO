@@ -19,7 +19,7 @@ typedef struct f{
 } Fila_Request;
 
 typedef struct d {
-    int em_uso;
+    //int em_uso;
     int tam_fila;
     int ultima_trilha;
     Trilhas *cabeca_trilhas;

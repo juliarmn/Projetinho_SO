@@ -17,7 +17,7 @@ void *disk_thread(void *arg)
     Thread_disco *args = (Thread_disco *)arg;
     Disco **HD = args->HD;
     Trilhas **atual = args->atual;
-    while (!(*HD)->cabeca_trilhas)
+    while (((*HD)->cabeca_trilhas) == NULL)
         ;
     while (1)
     {
@@ -40,8 +40,6 @@ void iniciar_disco(Disco **HD, Trilhas **atual)
     Thread_disco disco;
 
     disco.HD = HD;
-    if (!HD)
-        printf("HD NULO\n");
     disco.atual = atual;
 
     if (pthread_create(&disco_thread, &disco_thread_atributo, disk_thread, &disco) != 0)
