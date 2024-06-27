@@ -113,9 +113,9 @@ Print_request *atender_lista(Print_request **cabeca_print)
  */
 void print_request(Print_request **cabeca_print, int tempo, Processo *processo)
 {
-    int print = tempo / 1000;
     flag_ES = 0;
     inserir_lista(cabeca_print, tempo, processo);
+    flag_ES = 1;
 }
 
 // Pensar em como interromper
@@ -133,7 +133,6 @@ void print_finish(Print_request **cabeca_print)
     while ((*cabeca_print) && flag_ES)
     {
         aux = atender_lista(cabeca_print);
-        //exit(0);
         printf("Processo %s e PID %d impresso em %d unidade de tempo.\n", aux->processo->nome, aux->processo->pid, aux->tempo);
         free(aux);
     }

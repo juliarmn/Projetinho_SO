@@ -242,15 +242,18 @@ Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **ca
 
             if (atendido->processo->cabeca_instrucao->tipo == 1)
             {
+                exit(0);
                 atendido->processo->status = 0;
                 disk_request('r', HD, atendido->processo->lista_instrucao->num, atendido->processo, atual);
-                atendido->processo->status = 1;
+                if (atendido->processo->lista_instrucao->prox && atendido->processo->status != 0)
+                    atendido->processo->lista_instrucao = atendido->processo->lista_instrucao->prox;
             }
             else if (atendido->processo->cabeca_instrucao->tipo == 2)
             {
                 atendido->processo->status = 0;
                 disk_request('w', HD, atendido->processo->lista_instrucao->num, atendido->processo, atual);
-                atendido->processo->status = 1;
+                if (atendido->processo->lista_instrucao->prox && atendido->processo->status != 0)
+                    atendido->processo->lista_instrucao = atendido->processo->lista_instrucao->prox;
             }
             else if (atendido->processo->lista_instrucao->tipo == 3)
             {
@@ -277,7 +280,8 @@ Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **ca
             {
                 atendido->processo->status = 0;
                 print_request(cabeca_print, atendido->processo->lista_instrucao->num, atendido->processo);
-                atendido->processo->status = 1;
+                if (atendido->processo->lista_instrucao->prox && atendido->processo->status != 0)
+                    atendido->processo->lista_instrucao = atendido->processo->lista_instrucao->prox;
             }
 
             else if (tempo_restante - atendido->processo->duracao < 0)
@@ -369,12 +373,10 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
         else if ((aux->processo->lista_instrucao->tipo == 1) &&
                  aux->processo->status != 0)
         {
-            exit(0);
-
             aux->processo->status = 0;
             disk_request('r', *HD, aux->processo->lista_instrucao->num, aux->processo, atual);
-            aux->processo->status = 1;
-            // aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
+            if (aux->processo->lista_instrucao->prox && aux->processo->status != 0)
+                aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
             if (flag_interrupcao == 1)
                 return;
         }
@@ -383,8 +385,8 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
         {
             aux->processo->status = 0;
             disk_request('w', *HD, aux->processo->lista_instrucao->num, aux->processo, atual);
-            aux->processo->status = 1;
-            // aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
+            if (aux->processo->lista_instrucao->prox && aux->processo->status != 0) 
+                aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
             if (flag_interrupcao == 1)
                 return;
         }
@@ -414,7 +416,8 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
                 return;
             aux->processo->status = 0;
             print_request(cabeca_print, aux->processo->lista_instrucao->num, aux->processo);
-            aux->processo->status = 1;
+            if (aux->processo->lista_instrucao->prox && aux->processo->status != 0)
+                aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
         }
         if (!aux->processo->lista_instrucao->prox)
         {

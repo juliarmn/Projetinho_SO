@@ -17,6 +17,7 @@ void *disk_thread(void *arg)
     Thread_disco *args = (Thread_disco *)arg;
     Disco **HD = args->HD;
     Trilhas **atual = args->atual;
+
     while (((*HD)->cabeca_trilhas) == NULL)
         ;
     while (1)
@@ -82,9 +83,18 @@ void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilha
     {
         if (op == 'w')
         {
+            flag_disco = 0;
             inserir_trilha(num_trilha, &HD, processo);
+            flag_disco = 1;
             *atual = HD->cabeca_trilhas;
-        } else {
+            printf("\033[38;5;206m");
+            printf("Fim da operacao de E/S para processo %s\n", processo->nome);
+            processo->status = 1;
+        }
+        else
+        {
+            printf("Não pode read\n");
+            processo->status = 1;
             return;
         }
     }
@@ -249,12 +259,11 @@ void inserir_fila_espera_disco(Disco **HD, Processo *processo, int num_trilha, i
 Fila_Request *atender_fila(Disco **HD, Trilhas **atual)
 {
     Fila_Request *aux = (*HD)->fila;
-
     if (aux->op == 'w')
     {
         flag_disco = 0;
         inserir_trilha((*HD)->fila->num_trilha, HD, (*HD)->fila->processo);
-        iniciar_disco(HD, atual);
+        flag_disco = 1;
     }
     else
     {
@@ -337,11 +346,11 @@ void elevador(Disco **HD, Trilhas **atual)
     direcao = 1; // 1 tá indo e 2 voltando
     while (1)
     {
-        
         if (flag_disco == 0)
             return;
         sleep(1);
-        if ((*atual)->num_trilha == (*HD)->fila->num_trilha)
+
+        if ((*HD)->fila && (*atual)->num_trilha == (*HD)->fila->num_trilha)
         {
             atender_fila(HD, atual);
         }
