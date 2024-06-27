@@ -62,7 +62,6 @@ typedef struct BCP
     double tam;
     Instrucao *lista_instrucao;
     Instrucao *cabeca_instrucao;
-    //log_processo *cabeca_log;
     int tam_lista_inst;
     int duracao;
     
@@ -76,6 +75,5 @@ FILE *abrir_arquivo(char *nome);
 Instrucao *inserir_lista_instrucoes(Instrucao **cabeca_inst);
 Processo *criar_processo(FILE *fp, Processo *processo);
 void imprimir_processo(Processo *processo);
-//void adicionar_log(Processo *processo, char * mensagem);
 
 #endif

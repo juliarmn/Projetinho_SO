@@ -4,9 +4,11 @@ sint5
 32
 s t v
 
-
+read 30
+write 40
+read 40
 exec 1000
 read 200
 exec 400
-read 30
+write 30
 exec 500

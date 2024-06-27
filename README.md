@@ -115,6 +115,14 @@ Tem uma lista de processos na CPU, no escalonador. O round robin verifica o quan
 
 Única thread para o Round Robin, que verifica uma *flag* que indica se pode travar ou não para criar o processo. Também verifica uma *flag* para imprimir, verificando com semáforo. 
 
+### Disco
+
+O disco é uma lista de trilhas, que são inseridas a medida que acontece escrita. Só pode ler se já tiver algo na trilha especificada. O elevador movimenta ponteiros na lista de trilha, atendendo a requisição quando chegar nela, de acordo com a política do algoritmo de elevador. Os processos ficam em lista de espera quando preciso.
+
+### ES e impressão
+
+Tem uma lista de requisição de impressoes, os processos entram em espera até serem atendidos nessa lista de prioridade (uma fila prioritária), em que menores tempos aparecem primeiro.
+
 ### Interface
 
 Foi feita no terminal. Mas na pasta Interface, há código com a *ncurses*, que vai ser arrumada para a parte 2.

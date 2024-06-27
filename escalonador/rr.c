@@ -1,5 +1,6 @@
 #include "rr.h"
 #include <semaphore.h>
+#include <unistd.h>
 extern int relogio;
 extern pthread_mutex_t mutex_interrupcao;
 extern int flag_interrupcao;
@@ -202,7 +203,7 @@ Round_robin *atender_semaforo(Round_robin *aux, Semaforo **cabeca_sem, char tipo
  *
  * @return Round_robin elemento atendido
  */
-Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **cabeca_sem)
+Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **cabeca_sem, Disco *HD, Trilhas **atual, Print_request **cabeca_print)
 {
 
     int tempo_restante = 0;
@@ -239,7 +240,22 @@ Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **ca
             if (flag_interrupcao == 1)
                 return NULL;
 
-            if (atendido->processo->lista_instrucao->tipo == 3)
+            if (atendido->processo->cabeca_instrucao->tipo == 1)
+            {
+                exit(0);
+                atendido->processo->status = 0;
+                disk_request('r', HD, atendido->processo->lista_instrucao->num, atendido->processo, atual);
+                if (atendido->processo->lista_instrucao->prox && atendido->processo->status != 0)
+                    atendido->processo->lista_instrucao = atendido->processo->lista_instrucao->prox;
+            }
+            else if (atendido->processo->cabeca_instrucao->tipo == 2)
+            {
+                atendido->processo->status = 0;
+                disk_request('w', HD, atendido->processo->lista_instrucao->num, atendido->processo, atual);
+                if (atendido->processo->lista_instrucao->prox && atendido->processo->status != 0)
+                    atendido->processo->lista_instrucao = atendido->processo->lista_instrucao->prox;
+            }
+            else if (atendido->processo->lista_instrucao->tipo == 3)
             {
                 atendido = atender_semaforo(atendido, cabeca_sem, 'P');
                 if (flag_interrupcao == 1)
@@ -259,6 +275,13 @@ Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **ca
 
                 if (atendido->processo->status == 0)
                     return atendido;
+            }
+            else if (atendido->processo->lista_instrucao->tipo == 5)
+            {
+                atendido->processo->status = 0;
+                print_request(cabeca_print, atendido->processo->lista_instrucao->num, atendido->processo);
+                if (atendido->processo->lista_instrucao->prox && atendido->processo->status != 0)
+                    atendido->processo->lista_instrucao = atendido->processo->lista_instrucao->prox;
             }
 
             else if (tempo_restante - atendido->processo->duracao < 0)
@@ -311,9 +334,9 @@ Round_robin *atender_instrucao(Round_robin *atendido, int quantum, Semaforo **ca
  *
  * @return void
  */
-void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabela_pag *memoria, Segmento **cabeca_seg, Segmento **remover_seg, Disco *HD, Trilhas **atual, Print_request **cabeca_print)
+void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabela_pag *memoria, Segmento **cabeca_seg, Segmento **remover_seg, Disco **HD, Trilhas **atual, Print_request **cabeca_print)
 {
-    if (!(*cabeca) && !(*cabeca_sem))
+    if (!(*cabeca) || !(*cabeca_sem))
         return;
     Round_robin *aux = malloc(sizeof(Round_robin));
     aux->prox = (*cabeca)->prox;
@@ -336,7 +359,7 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
             quantum_processo = QUANTUM / aux->processo->prioridade;
         if (aux->processo->lista_instrucao->tipo == 0 && aux->processo->status != 0)
         {
-            aux = atender_instrucao(aux, quantum_processo, cabeca_sem);
+            aux = atender_instrucao(aux, quantum_processo, cabeca_sem, *HD, atual, cabeca_print);
             if (flag_interrupcao == 1)
                 return;
             if (aux->processo->status == 0)
@@ -350,25 +373,20 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
         else if ((aux->processo->lista_instrucao->tipo == 1) &&
                  aux->processo->status != 0)
         {
-            disk_request('r', HD, aux->processo->lista_instrucao->num, aux->processo, atual);
-            aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
+            aux->processo->status = 0;
+            disk_request('r', *HD, aux->processo->lista_instrucao->num, aux->processo, atual);
+            if (aux->processo->lista_instrucao->prox && aux->processo->status != 0)
+                aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
             if (flag_interrupcao == 1)
                 return;
-
-            /*
-            if (aux->processo->status == 0)
-            {
-                quantum_processo = QUANTUM / aux->processo->prioridade;
-                aux->processo->status = 4;
-            }
-            else
-                quantum_processo = 0;*/
         }
         else if ((aux->processo->lista_instrucao->tipo == 2) &&
                  aux->processo->status != 0)
         {
-             disk_request('w', HD, aux->processo->lista_instrucao->num, aux->processo, atual);
-            aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
+            aux->processo->status = 0;
+            disk_request('w', *HD, aux->processo->lista_instrucao->num, aux->processo, atual);
+            if (aux->processo->lista_instrucao->prox && aux->processo->status != 0) 
+                aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
             if (flag_interrupcao == 1)
                 return;
         }
@@ -391,11 +409,15 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
                 quantum_processo -= 200;
             else
                 quantum_processo = 0;
-        } else if (aux->processo->lista_instrucao->tipo == 5 && aux->processo->status != 0) {
-             if (flag_interrupcao == 1)
+        }
+        else if (aux->processo->lista_instrucao->tipo == 5 && aux->processo->status != 0)
+        {
+            if (flag_interrupcao == 1)
                 return;
-            iniciar_impressao(cabeca_print, aux->processo->lista_instrucao->num, aux->processo);
-            aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
+            aux->processo->status = 0;
+            print_request(cabeca_print, aux->processo->lista_instrucao->num, aux->processo);
+            if (aux->processo->lista_instrucao->prox && aux->processo->status != 0)
+                aux->processo->lista_instrucao = aux->processo->lista_instrucao->prox;
         }
         if (!aux->processo->lista_instrucao->prox)
         {
@@ -419,10 +441,7 @@ void robin_robin_atende(Round_robin **cabeca, Semaforo **cabeca_sem, Vetor_tabel
                 return;
         }
     }
-
-    // pthread_mutex_lock(&mutex_interrupcao);
     flag_interrupcao = 1;
-    // pthread_mutex_unlock(&mutex_interrupcao);
 }
 
 void print_lista_robin(Round_robin *robin)
