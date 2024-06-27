@@ -4,9 +4,21 @@ sint3
 8
 s t v
 
-P(s)
-exec 1000
-V(s)
+
+read 30
+write 40
+write 50
+write 90
+print 140
+print 150
+print 30
+print 130
+print 330
+print 3330
+print 60
+print 80
+print 10
+print 11
 read 20
 exec 400
 read 30

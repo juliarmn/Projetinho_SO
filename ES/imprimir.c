@@ -6,6 +6,7 @@ extern int imprime_robin;
 extern sem_t ler;
 extern int relogio;
 int flag_ES = 1;
+int flag_inicio_thread = 0;
 
 typedef struct arg_disk
 {
@@ -16,7 +17,7 @@ void *ES_thread(void *arg)
 {
     Thread_ES *args = (Thread_ES *)arg;
     Print_request **cabeca_print = args->cabeca_print;
-    while (!(*cabeca_print))
+    while (!flag_inicio_thread)
         ;
     while (1)
     {
@@ -69,6 +70,7 @@ void inserir_lista(Print_request **cabeca_print, int tempo, Processo *processo)
     {
         *cabeca_print = novo;
         novo->prox = NULL;
+        flag_inicio_thread = 1;
         return;
     }
 
@@ -76,6 +78,7 @@ void inserir_lista(Print_request **cabeca_print, int tempo, Processo *processo)
     {
         novo->prox = *cabeca_print;
         *cabeca_print = novo;
+        flag_inicio_thread = 1;
         return;
     }
 
@@ -88,6 +91,7 @@ void inserir_lista(Print_request **cabeca_print, int tempo, Processo *processo)
 
     novo->prox = aux->prox;
     aux->prox = novo;
+    flag_inicio_thread = 1;
 }
 
 /**
@@ -136,6 +140,7 @@ void print_finish(Print_request **cabeca_print)
     while ((*cabeca_print) && flag_ES)
     {
         aux = atender_lista(cabeca_print);
+        aux->processo->status = 1;
         sem_wait(&ler);
         if (imprime_robin == 1)
         {
@@ -143,6 +148,6 @@ void print_finish(Print_request **cabeca_print)
             printf("\t\tProcesso %s e PID %d impresso em %d unidade de tempo.\n", aux->processo->nome, aux->processo->pid, aux->tempo);
         }
         sem_post(&ler);
-        free(aux);
+        // free(aux);
     }
 }

@@ -4,19 +4,13 @@ sint4
 8
 s t w e x
 
-exec 1000
-read 20
-exec 400
-read 30
-exec 500
-exec 20000
-write 20
-print 150
+P(s)
 P(w)
-V(w)
-P(t)
-exec 500
-V(t)
+write 53
+write 95
 P(e)
-exec 5300
+P(x)
+V(w)
 V(e)
+V(x)
+V(s)

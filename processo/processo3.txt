@@ -7,6 +7,17 @@ s t v
 read 30
 write 40
 read 40
+print 30
+print 130
+print 330
+print 3330
+print 60
+write 44
+write 50
+write 90
+read 90
+read 55
+read 50
 exec 1000
 read 200
 exec 400

@@ -111,7 +111,7 @@ void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilha
             sem_wait(&ler);
             if (imprime_robin == 1)
             {
-                printf("Não pode read\n");
+                printf("\t\tNão pode read, trilha vazia\n");
             }
             sem_post(&ler);
 
@@ -386,6 +386,7 @@ void ler_processo(Disco *HD, int num_trilha)
 void elevador(Disco **HD, Trilhas **atual)
 {
     direcao = 1; // 1 tá indo e 2 voltando
+    Fila_Request *aux;
     while (1)
     {
         if (flag_disco == 0)
@@ -394,7 +395,8 @@ void elevador(Disco **HD, Trilhas **atual)
 
         if ((*HD)->fila && (*atual)->num_trilha == (*HD)->fila->num_trilha)
         {
-            atender_fila(HD, atual);
+            aux = atender_fila(HD, atual);
+            free(aux);
         }
 
         if (!(*atual)->prox && !(*atual)->ant)
