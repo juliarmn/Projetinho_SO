@@ -1,6 +1,9 @@
 #include "imprimir.h"
 #include <pthread.h>
 #include <unistd.h>
+#include <semaphore.h>
+extern int imprime_robin;
+extern sem_t ler;
 extern int relogio;
 int flag_ES = 1;
 
@@ -133,7 +136,13 @@ void print_finish(Print_request **cabeca_print)
     while ((*cabeca_print) && flag_ES)
     {
         aux = atender_lista(cabeca_print);
-        printf("Processo %s e PID %d impresso em %d unidade de tempo.\n", aux->processo->nome, aux->processo->pid, aux->tempo);
+        sem_wait(&ler);
+        if (imprime_robin == 1)
+        {
+            printf("\033[38;5;206m");
+            printf("\t\tProcesso %s e PID %d impresso em %d unidade de tempo.\n", aux->processo->nome, aux->processo->pid, aux->tempo);
+        }
+        sem_post(&ler);
         free(aux);
     }
 }

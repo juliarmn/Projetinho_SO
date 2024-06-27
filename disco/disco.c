@@ -1,6 +1,9 @@
 #include "disco.h"
 #include <pthread.h>
 #include <unistd.h>
+#include <semaphore.h>
+extern int imprime_robin;
+extern sem_t ler;
 
 extern int relogio;
 int direcao;
@@ -58,8 +61,14 @@ void iniciar_disco(Disco **HD, Trilhas **atual)
  */
 void disk_finish(Processo *processo)
 {
-    printf("\033[38;5;206m");
-    printf("Fim da operacao de E/S para processo %s\n", processo->nome);
+    sem_wait(&ler);
+    if (imprime_robin == 1)
+    {
+        printf("\033[38;5;206m");
+        printf("\t\tFim da operacao de E/S para processo %s\n", processo->nome);
+    }
+    sem_post(&ler);
+
     processo->status = 1;
 }
 
@@ -87,13 +96,25 @@ void disk_request(char op, Disco *HD, int num_trilha, Processo *processo, Trilha
             inserir_trilha(num_trilha, &HD, processo);
             flag_disco = 1;
             *atual = HD->cabeca_trilhas;
-            printf("\033[38;5;206m");
-            printf("Fim da operacao de E/S para processo %s\n", processo->nome);
+            sem_wait(&ler);
+            if (imprime_robin == 1)
+            {
+                printf("\033[38;5;206m");
+                printf("\t\tFim da operacao de E/S para processo %s\n", processo->nome);
+            }
+            sem_post(&ler);
+
             processo->status = 1;
         }
         else
         {
-            printf("Não pode read\n");
+            sem_wait(&ler);
+            if (imprime_robin == 1)
+            {
+                printf("Não pode read\n");
+            }
+            sem_post(&ler);
+
             processo->status = 1;
             return;
         }
@@ -152,7 +173,12 @@ void inserir_trilha(int num_trilha, Disco **HD, Processo *processo)
 {
     if (trilha_existe((*HD), num_trilha))
     {
-        printf("Trilha ocupada\n");
+        sem_wait(&ler);
+        if (imprime_robin == 1)
+        {
+            printf("\t\tTrilha ocupada\n");
+        }
+        sem_post(&ler);
         return;
     }
 
@@ -316,21 +342,37 @@ void ler_processo(Disco *HD, int num_trilha)
 {
     Processo *processo;
     Trilhas *trilha = buscar_trilha(num_trilha, HD);
-    printf("\033[38;5;206m");
+    sem_wait(&ler);
+    if (imprime_robin == 1)
+    {
+        printf("\033[38;5;206m");
+        printf("\t\tInício da leitura\n");
+    }
+    sem_post(&ler);
 
-    printf("Início da leitura\n");
     sleep(1);
     if (!trilha)
     {
-        printf("\033[6;1mNada na trilha\n");
+        sem_wait(&ler);
+        if (imprime_robin == 1)
+        {
+            printf("\t\t\033[6;1mNada na trilha\n");
+        }
+        sem_post(&ler);
+
         return;
     }
 
     processo = trilha->processo;
 
     sleep(2);
-    printf("\033[38;5;206m");
-    printf("Operação de leitura do processo %s realizada\n", processo->nome);
+    sem_wait(&ler);
+    if (imprime_robin == 1)
+    {
+        printf("\033[38;5;206m");
+        printf("\t\tOperação de leitura do processo %s realizada\n", processo->nome);
+    }
+    sem_post(&ler);
 }
 
 /**
