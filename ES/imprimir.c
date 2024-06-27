@@ -7,40 +7,37 @@ int flag_ES = 1;
 typedef struct arg_disk
 {
     Print_request **cabeca_print;
-    int tempo;
-    Processo *processo;
 } Thread_ES;
 
 void *ES_thread(void *arg)
 {
     Thread_ES *args = (Thread_ES *)arg;
     Print_request **cabeca_print = args->cabeca_print;
-    int tempo = args->tempo;
-    Processo *processo = args->processo;
-
-    while (flag_ES)
+    while (!(*cabeca_print))
+        ;
+    while (1)
     {
-        print_request(cabeca_print, tempo, processo);
+        while (flag_ES)
+        {
+            print_finish(cabeca_print);
+        }
     }
-    processo->status = 0;
 
     return NULL;
 }
 
-void iniciar_impressao(Print_request **cabeca_print, int tempo, Processo *processo)
+void iniciar_impressao(Print_request **cabeca_print)
 {
     pthread_t es_thread;
     pthread_attr_t es_thread_atributo;
     pthread_attr_init(&es_thread_atributo);
     pthread_attr_setscope(&es_thread_atributo, PTHREAD_SCOPE_SYSTEM);
 
-    Thread_ES es;
+    Thread_ES *es = malloc(sizeof(Thread_ES));
 
-    es.cabeca_print = cabeca_print;
-    es.tempo = tempo;
-    es.processo = processo;
+    es->cabeca_print = cabeca_print;
 
-    if (pthread_create(&es_thread, &es_thread_atributo, ES_thread, &es) != 0)
+    if (pthread_create(&es_thread, &es_thread_atributo, ES_thread, es) != 0)
     {
         printf("\033[38;5;196m");
         printf("\n\t\t\033[6;1mNÃO CRIOU A THREAD PARA DISCO\033[0m\n");
@@ -117,15 +114,8 @@ Print_request *atender_lista(Print_request **cabeca_print)
 void print_request(Print_request **cabeca_print, int tempo, Processo *processo)
 {
     int print = tempo / 1000;
-    if (!(*cabeca_print))
-    {
-        sleep(print);
-        printf("Processo %s e PID %d impresso em %d unidade de tempo.\n", processo->nome, processo->pid, tempo);
-        return;
-    }
     flag_ES = 0;
     inserir_lista(cabeca_print, tempo, processo);
-    print_finish(cabeca_print, processo);
 }
 
 // Pensar em como interromper
@@ -137,12 +127,13 @@ void print_request(Print_request **cabeca_print, int tempo, Processo *processo)
  *
  * @return void
  */
-void print_finish(Print_request **cabeca_print, Processo *processo)
+void print_finish(Print_request **cabeca_print)
 {
     Print_request *aux;
     while ((*cabeca_print) && flag_ES)
     {
         aux = atender_lista(cabeca_print);
+        //exit(0);
         printf("Processo %s e PID %d impresso em %d unidade de tempo.\n", aux->processo->nome, aux->processo->pid, aux->tempo);
         free(aux);
     }

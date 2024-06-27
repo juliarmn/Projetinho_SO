@@ -15,7 +15,7 @@ int imprime_robin = 0;
 
 void imprime_logo()
 {
-    //system("clear");
+    system("clear");
     printf("\033[38;5;206m");
     printf("\n\n");
     printf("\t\t\t\t\t /\\_/\\  \n");
@@ -138,16 +138,17 @@ int main()
     thread_argumento.cabeca_print = &cabeca_print;
     thread_argumento.atual = &atual;
 
-    if (pthread_create(&thread, &thread_atributo, round_robin_thread, &thread_argumento) != 0)
+   if (pthread_create(&thread, &thread_atributo, round_robin_thread, &thread_argumento) != 0)
     {
         printf("\033[38;5;196m");
         printf("\n\t\t\033[6;1mNÃO CRIOU A THREAD\033[0m\n");
         sleep(1);
-        //system("clear");
+        system("clear");
         return 1;
     }
-
+ 
     iniciar_disco(&HD, &atual);
+    iniciar_impressao(&cabeca_print);
     do
     {
         op = menu();
@@ -156,7 +157,7 @@ int main()
             printf("\033[38;5;196m");
             printf("\n\t\t\033[6;1mDIGITE UMA OPÇÃO VÁLIDA\033[0m\n");
             sleep(1);
-            //system("clear");
+            system("clear");
         }
 
         switch (op)
@@ -180,7 +181,7 @@ int main()
                     printf("\033[38;5;196m");
                     printf("\n\t\t\033[6;1mO PROCESSO JÁ EXISTE NA MEMÓRIA (PIDS IGUAIS)\033[0m\n");
                     sleep(1);
-                    //system("clear");
+                    system("clear");
                     break;
                 }
                 if (((NUM_TOTAL_PAG * TAMANHO_PAGINA) / KILOBYTE) < processo->tam)
@@ -188,7 +189,7 @@ int main()
                     printf("\033[38;5;196m");
                     printf("\n\t\t\033[6;1mSEGMENTO MAIOR QUE A MEMÓRIA\033[0m\n");
                     sleep(1);
-                    //system("clear");
+                    system("clear");
                     break;
                 }
                 carregou_memoria = finalizar_carregamento_memoria(processo, &cabeca_segmento, memoria);
@@ -210,7 +211,7 @@ int main()
                 printf("\033[38;5;196m");
                 printf("\n\t\t\033[6;1mNOME INVÁLIDO\033[0m\n");
                 sleep(1);
-                //system("clear");
+                system("clear");
             }
             break;
         }
@@ -242,7 +243,7 @@ int main()
         }
         case 4:
         {
-            //system("clear");
+            system("clear");
             printf("\033[38;5;206m");
 
             printf("\t\t                   ####        ####                \n");

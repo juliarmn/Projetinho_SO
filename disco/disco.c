@@ -37,12 +37,12 @@ void iniciar_disco(Disco **HD, Trilhas **atual)
     pthread_attr_init(&disco_thread_atributo);
     pthread_attr_setscope(&disco_thread_atributo, PTHREAD_SCOPE_SYSTEM);
 
-    Thread_disco disco;
+    Thread_disco *disco = malloc(sizeof(Thread_disco));
 
-    disco.HD = HD;
-    disco.atual = atual;
+    disco->HD = HD;
+    disco->atual = atual;
 
-    if (pthread_create(&disco_thread, &disco_thread_atributo, disk_thread, &disco) != 0)
+    if (pthread_create(&disco_thread, &disco_thread_atributo, disk_thread, disco) != 0)
     {
         printf("\033[38;5;196m");
         printf("\n\t\t\033[6;1mNÃO CRIOU A THREAD PARA DISCO\033[0m\n");
@@ -337,6 +337,7 @@ void elevador(Disco **HD, Trilhas **atual)
     direcao = 1; // 1 tá indo e 2 voltando
     while (1)
     {
+        
         if (flag_disco == 0)
             return;
         sleep(1);
